@@ -136,5 +136,7 @@ xbj_list, Q2_list, sqrt_s_list= np.loadtxt('exp_all.dat', usecols = (0, 1, 2), u
 sigma0_half = myparams[:,-1][which_bk]
 my_array = generate_training_set(xbj_list, Q2_list, sqrt_s_list, sigma0_half)
 print(my_array)
-# np.savetxt(folder + '/train{}.dat'.format(which_bk), my_array, delimiter = " ", newline = "\n")
+
+np.savetxt(folder + '/train{}.dat'.format(which_bk), my_array, delimiter = " ", newline = "\n")
+
 # for i in `seq 0 25`; {sbatch submit_getdata.sh ${i};}
