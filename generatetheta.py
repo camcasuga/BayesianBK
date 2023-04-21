@@ -9,7 +9,7 @@ import sys
 model = str(sys.argv[1])
 n_paramvectors = int(sys.argv[2])
 type_lhs = int(sys.argv[3]) # 1 for plain LHS # 2 for orthogonal 
-print(type_lhs)
+
 
 if type_lhs == 1:
 	type_lhs_name = 'plainLHS'
