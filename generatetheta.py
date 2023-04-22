@@ -34,14 +34,18 @@ if model == 'mv':
 	u_bounds = [2., 100., 40.] # we are using MVe where the anomalous dimension gamma = 1
 	n_params = 3
 	mylimits = np.array([l_bounds, u_bounds])
-	myparams = get_lhcsamples(n_params, n_paramvectors, param_limits = mylimits, seed_ = 10, strength_ = type_lhs)
+	myparams = get_lhcsamples(n_params, 
+			   n_paramvectors, 
+			   param_limits = mylimits, 
+			   seed_ = 10, 
+			   strength_ = type_lhs)
 	i = 0
-	lines = ['#!bin/bash', '\n']
+	#lines = ['#!bin/bash', '\n']
 	for qs02, c2 in myparams[:, 0:2]:
-		#cmd = 'OMP_NUM_THREADS=2 ./rcbk/build/bin/rcbk -ic MV {} 1 0.01 1 -rc BALITSKY -alphas_scaling {} -maxy 12 -fast -output w3p20d/{}.dat'.format(str(qs02), str(c2), str(i))
+		cmd = 'OMP_NUM_THREADS=2 ../rcbk/build/bin/rcbk -ic MV {} 1 0.01 1 -rc BALITSKY -alphas_scaling {} -maxy 12 -fast -output {}/bks/{}.dat'.format(str(qs02), str(c2), model_dir, str(i))
 		#os.system(cmd)
-		line = "sbatch -J bk submitmv.sh {0} {1} {2}".format(str(qs02), str(c2),str(i))
-		lines.append(line)
+		#line = "sbatch -J bk submitmv.sh {0} {1} {2}".format(str(qs02), str(c2),str(i))
+		#lines.append(line)
 		i += 1
 
 if model == 'mve':
@@ -49,16 +53,19 @@ if model == 'mve':
 	u_bounds = [2., 100., 100., 40.] # we are using MVe where the anomalous dimension gamma = 1
 	n_params = 4
 	mylimits = np.array([l_bounds, u_bounds])
-	myparams = get_lhcsamples(n_params, n_paramvectors, param_limits = mylimits, seed_ = 10, strength_ = type_lhs)
+	myparams = get_lhcsamples(n_params, 
+			   n_paramvectors, 
+			   param_limits = mylimits, 
+			   seed_ = 10, strength_ = type_lhs)
 	i = 0
-	lines = ['#!bin/bash', '\n']
+	#lines = ['#!bin/bash', '\n']
 	for qs02, ec, c2 in myparams[:, 0:3]:
-		#cmd = 'OMP_NUM_THREADS=2 ./rcbk/build/bin/rcbk -ic MV {} 1 0.01 {} -rc BALITSKY -alphas_scaling {} -maxy 12 -fast -output w3p20d/{}.dat'.format(str(qs02), str(ec), str(c2), str(i))
-		#os.system(cmd)
-		line = "sbatch -J bk submitmve.sh {0} {1} {2} {3}".format(str(qs02),str(ec), str(c2),str(i))
-		lines.append(line)
+		cmd = 'OMP_NUM_THREADS=2 ../rcbk/build/bin/rcbk -ic MV {} 1 0.01 {} -rc BALITSKY -alphas_scaling {} -maxy 12 -fast -output {}/bks/{}.dat'.format(str(qs02), str(ec), str(c2), model_dir, str(i))
+		os.system(cmd)
+		#line = "sbatch -J bk submitmve.sh {0} {1} {2} {3}".format(str(qs02),str(ec), str(c2),str(i))
+		#lines.append(line)
 		i += 1
 
 np.savetxt(model_dir + '/theta.dat', myparams, newline = '\n')
 print('design points saved in: ./' + model_dir + '/theta.dat')
-np.savetxt('submit_bk_jobs_{}_{}_{}d.sh'.format(model, type_lhs_name, n_paramvectors), lines, newline = '\n', fmt='%s')
+#np.savetxt('submit_bk_jobs_{}_{}_{}d.sh'.format(model, type_lhs_name, n_paramvectors), lines, newline = '\n', fmt='%s')

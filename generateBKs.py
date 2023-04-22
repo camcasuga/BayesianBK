@@ -5,7 +5,7 @@ from scipy.stats import qmc
 from math import pow
 import sys
 
-#folder = str(sys.argv[1]) # path to folder 
+folder = str(sys.argv[1]) # path to folder 
 model = str(sys.argv[1])
 
 def get_lhcsamples(nparams, nsamples, param_limits = None ,seed_ = None, strength_ = 1):
@@ -24,7 +24,7 @@ if model == 'mv':
 	n_params = 3
 	mylimits = np.array([l_bounds, u_bounds])
 	myparams = get_lhcsamples(n_params, n_paramvectors, param_limits = mylimits, seed_ = 10, strength_ = 1)
-	np.savetxt(folder + '/{}model/{}d/theta.dat''.format(model, str(n_paramvectors)), myparams, newline = '\n')
+	np.savetxt(folder + '/{}model/{}d/theta.dat'.format(model, str(n_paramvectors)), myparams, newline = '\n')
 	i = 0
 	lines = []
 	for qs02, c2 in myparams[:, 0:2]:
