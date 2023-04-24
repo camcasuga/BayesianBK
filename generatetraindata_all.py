@@ -5,6 +5,7 @@ import sys
 from scipy import interpolate, integrate
 from scipy.special import k0,k1
 from numba import njit, float64
+import time
 
 
 folder = str(sys.argv[1]) # pathname to folder containing theta
@@ -57,14 +58,13 @@ def ReadBKDipole(index): #
     n = int(pars[2])
     r_values = np.array([minr*mult**i for i in range(n)])
     
-    
     rgrid=[]
     ygrid=[]
     for y in Y_values:
         for r in r_values:
             rgrid.append(r)
             ygrid.append(y)
-    i
+
     interpolator = interpolate.CloughTocher2DInterpolator((ygrid, rgrid), N_values.flatten(), fill_value=0)
     
     return interpolator
@@ -128,24 +128,27 @@ def p2f(array):
     return np.array(array.str.rstrip('%').astype('float'))/100
 
 # make the training set
-def generate_training_set_2parameters(xbj_list, Q2_list, sqrt_s_list, amplitude_params_list_index, sigma0_half_list): 
+def generate_training_set(xbj_list, Q2_list, sqrt_s_list, amplitude_params_list_index, sigma0_half_list): 
     trainingset = [] # different parameters
     supplement = [] # contain list of 
     for i in range(len(amplitude_params_list_index)):
-        diff_kinematics = []
+        print("currently at {}th parameter out of {} design points".format(i+1, len(amplitude_params_list_index)))
+        st = time.time()
         
-        for j in range(len(xbj_list)):
-            xsec = get_sigmar(xbj_list[j], Q2_list[j], sqrt_s_list[j], amplitude_params_list_index[i], sigma0_half_list[i])
-            diff_kinematics.append(xsec)
+        diff_kinematics = [get_sigmar(xbj_list[j], 
+                                      Q2_list[j], 
+                                      sqrt_s_list[j], 
+                                      amplitude_params_list_index[i], 
+                                      sigma0_half_list[i]) for j in range(len(xbj_list))]
         
+        et = time.time()
         trainingset.append(diff_kinematics)
-        
+        print("time taken per design point: {} seconds".format(et-st))    
     return trainingset
-
 
 xbj_list, Q2_list, sqrt_s_list = np.loadtxt('exp_all.dat', usecols = (0,1,2), unpack = True)
 amplitude_params_list_index, sigma0_half_list = n_params_list, myparams[:,-1]
 
 # generate and then save the training file
-my_array = generate_training_set_2parameters(xbj_list, Q2_list, sqrt_s_list, amplitude_params_list_index, sigma0_half_list)
-np.savetxt(folder + '/train.dat', my_array, delimiter = " ", newline = "\n")
+my_array = generate_training_set(xbj_list, Q2_list, sqrt_s_list, amplitude_params_list_index, sigma0_half_list)
+np.savetxt(folder + '/trainpypy.dat', my_array, delimiter = " ", newline = "\n")

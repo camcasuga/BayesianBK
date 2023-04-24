@@ -28,6 +28,8 @@ def get_lhcsamples(nparams, nsamples, param_limits = None ,seed_ = None, strengt
 model_dir = '{}/{}/{}d'.format(model, type_lhs_name, str(n_paramvectors))
 isExist = os.path.exists(model_dir)
 if not isExist: os.mkdir(model_dir)
+isExist2 = os.path.exists(model_dir + '/bks')
+if not isExist2: os.mkdir(model_dir + '/bks')
 
 if model == 'mv':
 	l_bounds = [.001, .1, 1.] # Qs02 , C2, sigma0/2
@@ -39,10 +41,12 @@ if model == 'mv':
 			   param_limits = mylimits, 
 			   seed_ = 10, 
 			   strength_ = type_lhs)
+	np.savetxt(model_dir + '/theta.dat', myparams, newline = '\n')
+	print('design points saved in: ./' + model_dir + '/theta.dat')
 	i = 0
 	#lines = ['#!bin/bash', '\n']
 	for qs02, c2 in myparams[:, 0:2]:
-		cmd = 'OMP_NUM_THREADS=2 ../rcbk/build/bin/rcbk -ic MV {} 1 0.01 1 -rc BALITSKY -alphas_scaling {} -maxy 12 -fast -output {}/bks/{}.dat'.format(str(qs02), str(c2), model_dir, str(i))
+		#cmd = 'OMP_NUM_THREADS=2 ../rcbk/build/bin/rcbk -ic MV {} 1 0.01 1 -rc BALITSKY -alphas_scaling {} -maxy 12 -fast -output {}/bks/{}.dat'.format(str(qs02), str(c2), model_dir, str(i))
 		#os.system(cmd)
 		#line = "sbatch -J bk submitmv.sh {0} {1} {2}".format(str(qs02), str(c2),str(i))
 		#lines.append(line)
@@ -57,15 +61,20 @@ if model == 'mve':
 			   n_paramvectors, 
 			   param_limits = mylimits, 
 			   seed_ = 10, strength_ = type_lhs)
-	i = 0
+	#np.savetxt(model_dir + '/theta.dat', myparams, newline = '\n')
+	#print('design points saved in: ./' + model_dir + '/theta.dat')
+	i = 11
 	#lines = ['#!bin/bash', '\n']
-	for qs02, ec, c2 in myparams[:, 0:3]:
+	myparams = np.vstack(np.loadtxt(model_dir + "/theta.dat", unpack = True)).T
+	print(myparams)
+	for qs02, ec, c2 in myparams[11:, 0:3]:
+		#print(qs02)
+		#print(ec)
 		cmd = 'OMP_NUM_THREADS=2 ../rcbk/build/bin/rcbk -ic MV {} 1 0.01 {} -rc BALITSKY -alphas_scaling {} -maxy 12 -fast -output {}/bks/{}.dat'.format(str(qs02), str(ec), str(c2), model_dir, str(i))
 		os.system(cmd)
 		#line = "sbatch -J bk submitmve.sh {0} {1} {2} {3}".format(str(qs02),str(ec), str(c2),str(i))
 		#lines.append(line)
 		i += 1
 
-np.savetxt(model_dir + '/theta.dat', myparams, newline = '\n')
-print('design points saved in: ./' + model_dir + '/theta.dat')
+
 #np.savetxt('submit_bk_jobs_{}_{}_{}d.sh'.format(model, type_lhs_name, n_paramvectors), lines, newline = '\n', fmt='%s')
