@@ -40,10 +40,14 @@ if model == 'mve':
 	mylimits = np.array([l_bounds, u_bounds])
 	myparams = get_lhcsamples(n_params, n_paramvectors, param_limits = mylimits, seed_ = 10, strength_ = 1)
 	np.savetxt(folder + '/{}model/{}d/theta.dat'.format(model, str(n_paramvectors)), myparams, newline = '\n')
+	#print('design points saved in: ./' + model_dir + '/theta.dat')
 	i = 0
 	lines = []
 	for qs02, ec, c2 in myparams[:, 0:3]:
 		#cmd = 'OMP_NUM_THREADS=2 ./rcbk/build/bin/rcbk -ic MV {} 1 0.01 {} -rc BALITSKY -alphas_scaling {} -maxy 12 -fast -output w3p20d/{}.dat'.format(str(qs02), str(ec), str(c2), str(i))
 		#os.system(cmd)
-		print("sbatch -J bk submit.sh {0} {1} {2} {3}".format(str(qs02),str(ec), str(c2),str(i)))
+		line = "sbatch -J bk submit.sh {0} {1} {2} {3}".format(str(qs02),str(ec), str(c2),str(i))
+		print(line)
 		i += 1
+
+np.savetxt('submit_bk_jobs_{}_{}_{}d.sh'.format(model, type_lhs_name, n_paramvectors), lines, newline = '\n', fmt='%s')

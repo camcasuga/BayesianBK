@@ -3,10 +3,11 @@ import sys
 from scipy import interpolate, integrate
 from scipy.special import k0,k1
 
-folder = str(sys.argv[1]) # pathname to folder containing theta
+#folder = str(sys.argv[1]) # pathname to folder containing theta
+folder = "mve"
 theta_file = folder + "/theta.dat"
 myparams = np.vstack(np.loadtxt(theta_file, unpack = True)).T
-which_bk = int(sys.argv[2]) # which bk file
+which_bk = int(sys.argv[1]) # which bk file
 
 
 def get_file():
@@ -139,4 +140,4 @@ print(my_array)
 
 np.savetxt(folder + '/train{}.dat'.format(which_bk), my_array, delimiter = " ", newline = "\n")
 
-# for i in `seq 0 25`; {sbatch submit_getdata.sh ${i};}
+# for i in {seq 0..10}; {sbatch submit_getdata.sh ${i};}

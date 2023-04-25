@@ -121,7 +121,7 @@ def get_sigmar(xbj, Q2, sqrt_s, index, sigma0_half):
     sigma0 = 2.56819 * 2 * sigma0_half # converts to 1/GeV²
     Nc = 3.0
     func = Q2 * Nc * sigma0 * integrate.quad(intzr, 0.0, 50.0, args = (xbj, Q2, sqrt_s, index))[0] 
-    print(xbj, Q2, sqrt_s, myparams[:,][index], func)
+    #print(xbj, Q2, sqrt_s, myparams[:,][index], func)
     return func # integrates over r
 
 def p2f(array):
@@ -142,6 +142,7 @@ def generate_training_set(xbj_list, Q2_list, sqrt_s_list, amplitude_params_list_
                                       sigma0_half_list[i]) for j in range(len(xbj_list))]
         
         et = time.time()
+        #print(diff_kinematics)
         trainingset.append(diff_kinematics)
         print("time taken per design point: {} seconds".format(et-st))    
     return trainingset
@@ -151,4 +152,4 @@ amplitude_params_list_index, sigma0_half_list = n_params_list, myparams[:,-1]
 
 # generate and then save the training file
 my_array = generate_training_set(xbj_list, Q2_list, sqrt_s_list, amplitude_params_list_index, sigma0_half_list)
-np.savetxt(folder + '/trainpypy.dat', my_array, delimiter = " ", newline = "\n")
+np.savetxt(folder + '/train.dat', my_array, delimiter = " ", newline = "\n")
