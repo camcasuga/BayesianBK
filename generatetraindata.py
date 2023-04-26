@@ -4,7 +4,7 @@ from scipy import interpolate, integrate
 from scipy.special import k0,k1
 
 #folder = str(sys.argv[1]) # pathname to folder containing theta
-folder = "mve"
+folder = "mve/orthLHS/121d"
 theta_file = folder + "/theta.dat"
 myparams = np.vstack(np.loadtxt(theta_file, unpack = True)).T
 which_bk = int(sys.argv[1]) # which bk file
@@ -112,10 +112,12 @@ def intzr(r, xbj, Q2, sqrt_s):
     return r * dip(y_int,r) * intz(r, xbj, Q2, sqrt_s)
 
 def get_sigmar(xbj, Q2, sqrt_s, sigma0_half):
-    sigma0 = 2.56819 * 2 * sigma0_half # converts to 1/GeV²
+    sigma0 = 2.56819 * 2 * sigma0_half # converts to 1/GeV2
     Nc = 3.0
     func = Q2 * Nc * sigma0 * integrate.quad(intzr, 0.0, 50.0, args = (xbj, Q2, sqrt_s))[0] 
-    # print(xbj, Q2, sqrt_s, myparams[:,][index], func)
+    #print(xbj, Q2, sqrt_s, myparams[:,][which_bk], func)
+    print(func)
+
     return func # integrates over r
 
 def p2f(array):
@@ -136,8 +138,9 @@ def generate_training_set(xbj_list, Q2_list, sqrt_s_list, sigma0_half):
 xbj_list, Q2_list, sqrt_s_list= np.loadtxt('exp_all.dat', usecols = (0, 1, 2), unpack = True)
 sigma0_half = myparams[:,-1][which_bk]
 my_array = generate_training_set(xbj_list, Q2_list, sqrt_s_list, sigma0_half)
-print(my_array)
 
 np.savetxt(folder + '/train{}.dat'.format(which_bk), my_array, delimiter = " ", newline = "\n")
+print('Done!')
 
-# for i in {seq 0..10}; {sbatch submit_getdata.sh ${i};}
+# for i in `seq 0 10`; {sbatch submit_getdata.sh ${i};}
+# ${1} > mve/trains/${1}.txt
