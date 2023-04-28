@@ -8,13 +8,14 @@ from numba import njit, float64
 import time
 
 
-folder = str(sys.argv[1]) # pathname to folder containing theta
-theta_file = folder + "/theta.dat"
+#folder = str(sys.argv[1]) # pathname to folder containing theta
+theta_file = "trainingdata4p100d_theta.dat" #folder + "/theta.dat"
 myparams = np.vstack(np.loadtxt(theta_file, unpack = True)).T
 n_params_list = list(range(len(myparams)))
+folder = "../../Downloads/practice/mve100d"
 
 def get_file(index):
-    filename = '{0}/bks/{1}.dat'.format(folder,index)
+    filename = '{0}/{1}.dat'.format(folder,index)
     return str(filename)
 
 
@@ -121,7 +122,7 @@ def get_sigmar(xbj, Q2, sqrt_s, index, sigma0_half):
     sigma0 = 2.56819 * 2 * sigma0_half # converts to 1/GeV²
     Nc = 3.0
     func = Q2 * Nc * sigma0 * integrate.quad(intzr, 0.0, 50.0, args = (xbj, Q2, sqrt_s, index))[0] 
-    #print(xbj, Q2, sqrt_s, myparams[:,][index], func)
+    print(xbj, Q2, sqrt_s, myparams[:,][index], func)
     return func # integrates over r
 
 def p2f(array):
@@ -132,7 +133,7 @@ def generate_training_set(xbj_list, Q2_list, sqrt_s_list, amplitude_params_list_
     trainingset = [] # different parameters
     supplement = [] # contain list of 
     for i in range(len(amplitude_params_list_index)):
-        print("currently at {}th parameter out of {} design points".format(i+1, len(amplitude_params_list_index)))
+        #print("currently at {}th parameter out of {} design points".format(i+1, len(amplitude_params_list_index)))
         st = time.time()
         
         diff_kinematics = [get_sigmar(xbj_list[j], 
@@ -144,7 +145,7 @@ def generate_training_set(xbj_list, Q2_list, sqrt_s_list, amplitude_params_list_
         et = time.time()
         #print(diff_kinematics)
         trainingset.append(diff_kinematics)
-        print("time taken per design point: {} seconds".format(et-st))    
+        print("time taken at design point number {}: {} seconds".format(i+1, et-st))    
     return trainingset
 
 xbj_list, Q2_list, sqrt_s_list = np.loadtxt('exp_all.dat', usecols = (0,1,2), unpack = True)
@@ -152,4 +153,4 @@ amplitude_params_list_index, sigma0_half_list = n_params_list, myparams[:,-1]
 
 # generate and then save the training file
 my_array = generate_training_set(xbj_list, Q2_list, sqrt_s_list, amplitude_params_list_index, sigma0_half_list)
-np.savetxt(folder + '/train.dat', my_array, delimiter = " ", newline = "\n")
+np.savetxt('trainingdata4p100_all.dat', my_array, delimiter = " ", newline = "\n")

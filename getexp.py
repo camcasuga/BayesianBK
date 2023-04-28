@@ -9,7 +9,7 @@ def p2f(array):
 
 # reading data file and storing separate data and errors into file
 NCdata = pd.read_csv("hera_wcomp.csv", header = 0)
-filt1 = (NCdata['Q**2 [GEV**2]'] <= 50.0) & (NCdata['Q**2 [GEV**2]'] >= 2.0) # get Q2 relevant range # (NCdata['XB'] < 0.01) &
+filt1 = (NCdata['Q**2 [GEV**2]'] <= 10.0) & (NCdata['Q**2 [GEV**2]'] >= 2.0) # get Q2 relevant range # (NCdata['XB'] < 0.01) &
 exp = NCdata[filt1] 
 data = np.array(exp['$\\sigma_{r,\\rm NC}^{+}$'])
 statp = p2f(exp["stat +"])
@@ -19,7 +19,7 @@ data_err = np.sqrt(statp**2 + statuncorp**2 + statcorp**2) * np.array(exp['$\\si
 xbj_list = np.array(exp['XB'])
 Q2_list = np.array(exp['Q**2 [GEV**2]'])
 sqrt_s_list = np.array(exp['sqrt_s'])
-np.savetxt('exp_all.dat', np.c_[xbj_list, Q2_list, sqrt_s_list, data, data_err], delimiter = " ", newline = "\n")
+np.savetxt('exp_all2.dat', np.c_[xbj_list, Q2_list, sqrt_s_list, data, data_err], delimiter = " ", newline = "\n")
 
 # xbj_list, Q2_list, sqrt_s_list= np.loadtxt('exp_all.dat', usecols = (0,1,2), unpack = True)
 # print('xbj = ', xbj_list)
