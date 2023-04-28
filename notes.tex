@@ -59,6 +59,98 @@ The GPE is ran with an RBF + WhiteKernel kernels and whose initial hyperparamete
 \label{fig:mve_121d_zscore}
 \end{figure}
 
-The emcee sampling for
+The emcee sampling for 100 walkers (30 minutes run time) is performed and from the chain, the walkers were not properly converged as we can see from the chain plot. We run the sampler again for more walkers (500) and less $Q_s0²$ space, in the hopes of finding a better convergence. Unfortunately, we show here that it does converge the walkers but nonetheless a poor sampling distribution is obtained. 
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\textwidth]{figs\mve_121d_500w.png}
+\caption{MVe run with 500 walkers}
+\label{fig:mve_121d_500w}
+\end{figure}
+
+with quantile values
+Quantiles: [(0.16, 0.10444113262841531), (0.5, 0.1100391634489063), (0.84, 0.16343216074397923)]
+Quantiles: [(0.16, 12.423226137980059), (0.5, 65.03766366566634), (0.84, 66.67212300526586)]
+Quantiles: [(0.16, 15.868392244095453), (0.5, 48.19438130661283), (0.84, 81.1793240923539)]
+Quantiles: [(0.16, 5.978122615546301), (0.5, 6.203794380396528), (0.84, 6.79909337149499)]
+
+To further prove that this is not a good sampling run, the mean acceptance is 0.197. The optimal acceptance ratio is .2 to .5.
+
+I had a suspicion on whether there was something wrong with generating the training set. However, when I tried using the same code to generate the training set for past runs, there was no problems. Let's compare the bayesian sampling in both cases. The first one is the old training set while the second one the new one. There is no difference in the sampling distribution besides the old one just had more samples. So there was no weird change to the training set code.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\textwidth]{figs\4p_new.png}
+\caption{tight MVe run with old training set}
+\label{fig:4p_new}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\textwidth]{figs\4p_new_vs.png}
+\caption{tight MVe run with new training set}
+\label{fig:4p_new_vs}
+\end{figure}
+
+I had the idea of combining a past MVe run with this current one. This old run has LH samples within a tighter parameter space where $Q_{s0}²$ = [0.001, 0.2] 1/GeV²; $e_c$ = [0.5, 40.0] ; $C²$ = [0.1, 40.0], and $\sigma_{0}/2$ = [1.0, 40.0] mb. This involved generating a training set from Q² = 2.0 GeV² to 10 GeV² to cover what was lacking in the old run and then combining the two training sets and parameter vector sets. So that a wider array of training data and parameter values (denser in the tighter region) can give us the areas where the likelihood is maximized. (Theta file and training file was appended).
+
+The sampling distribution is shown below. 
+
+Quantiles: [(0.16, 0.06739340877316732), (0.5, 0.11670826980103077), (0.84, 0.21280114410076745)]
+Quantiles: [(0.16, 11.079119769318801), (0.5, 60.1650779980113), (0.84, 99.0661828030286)]
+Quantiles: [(0.16, 9.1138629738339), (0.5, 14.641110632950689), (0.84, 65.43275805593659)]
+Quantiles: [(0.16, 4.765888420339204), (0.5, 6.945807097304044), (0.84, 17.08536031618019)]
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs\mve_121+100d_500w.png}
+\caption{MVe run with 500 walkers with hybrid training set}
+\label{fig:mve_121+100d_500w}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs\mve_121+100d_500w_chain.png}
+\caption{MVe run with 500 walkers with hybrid training set: chain}
+\label{fig:mve_121+100d_500w_chain}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs\mve_121+100d_500w_logprob.png}
+\caption{MVe run with 500 walkers with hybrid training set: log prob}
+\label{fig:mve_121+100d_500w_logprob}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs\mve_121+100d_gpe.png}
+\caption{GPE prediction at a single kinematical point}
+\label{fig:mve_121+100d_gpe}
+\end{figure}
+
+Even if the GPE is performing well, because the walkers were initialized in a very large space, they struggle to find the optimal likelihood spots. Despite converegences at localized spots, the log prob chain shows that they settle at different values of posterior probabilities. The 1d and 2d histograms shown are therefore not very reliable. 
+
+Let's try it again with a smaller initialization space and less walkers.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs\mve_121+100d_100w_narrow.png}
+\caption{MVe run with 100 walkers with hybrid training set}
+\label{fig:mve_121+100d_100w_narrow}
+\end{figure}
+
+This shows proper convergence in both posterior distributions and sample chain. However, there is no proper peak for the C² posterior distribution. I tried setting a narrower initialization for the other parameters and set C² to be initialized at a wider bound [0.1, 100.0] but that did not help as can be seen below.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs\mve_121+100d_100w_narrowinit_wideC2.png}
+\caption{MVe run with 100 walkers with hybrid training set: C² initialized at [0.1, 100.0]}
+\label{fig:mve_121+100d_100w_narrowinit_wideC2}
+\end{figure}
+
+So far we have not been able to constrain C². Next, I have a suspicion of the Q² dependence. Let's try removing the portion where Q² = 2.0 GeV² to 10 GeV² and see if that helps.
+
+
 
 \end{document}
