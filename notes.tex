@@ -149,8 +149,92 @@ This shows proper convergence in both posterior distributions and sample chain. 
 \label{fig:mve_121+100d_100w_narrowinit_wideC2}
 \end{figure}
 
-So far we have not been able to constrain C². Next, I have a suspicion of the Q² dependence. Let's try removing the portion where Q² = 2.0 GeV² to 10 GeV² and see if that helps.
+So far we have not been able to constrain C². Next, I have a suspicion that training the gpe for such a wide parameter space messes up the correlations between the values of the reduced cross section. So we switch back to the complete training set but with training set generated with design points sampled in a narrower bound where $Q_{s0}²$ = [0.001, 0.2] 1/GeV²; $e_c$ = [0.5, 40.0] ; $C²$ = [0.1, 40.0], and $\sigma_{0}/2$ = [10.0, 30.0] mb, a more reasonable space centered around the values found in the rcbk paper. 
 
+The GPE was trained for 403 kinematical points where the Q^2 range is from 2.0 to 50.0 GeV^2 where the BK limit is valid. The GPE prediction did very well with 10 percent test data and 6 principal components chosen via qualitative scan of the z-score for different number of components shown below:
 
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs\mve_100d_zscore.png}
+\caption{Z-score for different number of principal components}
+\label{fig:mve_100d_zscore}
+\end{figure}
+
+And this is how the GPE performs for a single kinematical point. 
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs\mve_100d_gpe.png}
+\caption{GPE prediction at a single kinematical point}
+\label{fig:mve_100d_gpe}
+\end{figure}
+
+And this is how the emcee sampling went:
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs\mve_100d_100w_chain.png}
+\caption{MVe run with 100 walkers with design points that have smaller parameter space: chain}
+\label{fig:mve_100d_100w_chain}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs\mve_100d_100w_logprob.png}
+\caption{MVe run with 100 walkers with design points that have smaller parameter space: log prob}
+\label{fig:mve_100d_100w_logprob}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs\mve_100d_100w.png}
+\caption{MVe run with 100 walkers with design points that have smaller parameter space}
+\label{fig:mve_100d_100w}
+\end{figure}
+
+As can be seen, this is reliable because the values have converged pretty nicely. These plots have quantile values at:
+
+Quantiles: [(0.16, 0.07143820127010826), (0.5, 0.07638353661097617), (0.84, 0.08141618409214102)]
+Quantiles: [(0.16, 6.285239578433669), (0.5, 7.751931754738654), (0.84, 9.806841368383767)]
+Quantiles: [(0.16, 4.6660036759992005), (0.5, 5.4127164763439595), (0.84, 6.635770252926398)]
+Quantiles: [(0.16, 14.750498330640387), (0.5, 15.192855023535254), (0.84, 15.585939293526577)]
+
+Mean and acceptance fraction:
+$Q_{s0}^{2}$ (GeV²)= 0.076
+$e_c$= 8.599
+$C^{2}$= 5.793
+$\sigma_0/2$ (mb)= 15.548
+Mean acceptance fraction: 0.397
+
+Sampling over an even narrower parameter space to remove the outlier walkers give us the following:
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs\mve_100d_100w_narrower.png}
+\caption{MVe run with 100 walkers with design points that have even smaller parameter space}
+\label{fig:mve_100d_100w_narrower}
+\end{figure}
+
+Quantiles: [(0.16, 0.07042138348378785), (0.5, 0.0754394360116123), (0.84, 0.0812312219535772)]
+Quantiles: [(0.16, 6.315976026500409), (0.5, 7.902611886718099), (0.84, 10.187421279951657)]
+Quantiles: [(0.16, 4.5375863981247), (0.5, 5.377111454170131), (0.84, 6.800972081221537)]
+Quantiles: [(0.16, 14.713371518080658), (0.5, 15.227200628204383), (0.84, 15.696835034938939)]
+
+$Q_{s0}^{2}$ (GeV²)= 0.077
+$e_c$= 8.107
+$C^{2}$= 5.674
+$\sigma_0/2$ (mb)= 15.318
+Mean acceptance fraction: 0.371
+
+I would prefer the first one because it has a higher acceptance fraction and better convergence.
+
+One hundred parameter vectors are now obtained from these posterior distributions (saved in "mve_100d_100w_sampled_from_posterior.txt" file) and obtained model cross sections from these samples. These values are ploted against experimental data. Say, for example, at Q2 = 45.0 GeV and sqrt(s) = 318.0 GeV, we compare the training set vs 100 design points sampled in the posterior.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs\mve_train_vs_post_45_318.png}
+\caption{Training set vs posterior samples at Q2 = 45.0 GeV and sqrt(s) = 318.0 GeV}
+\label{fig:mve_train_vs_post_45_318}
+\end{figure}
 
 \end{document}
