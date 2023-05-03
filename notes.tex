@@ -169,7 +169,7 @@ And this is how the GPE performs for a single kinematical point.
 \label{fig:mve_100d_gpe}
 \end{figure}
 
-And this is how the emcee sampling went:
+And this is how the emcee sampling went (using 100 walkers, 2000 burn steps and 1000 production steps):
 
 \begin{figure}
 \centering
@@ -194,25 +194,25 @@ And this is how the emcee sampling went:
 
 As can be seen, this is reliable because the values have converged pretty nicely. These plots have quantile values at:
 
-Quantiles: [(0.16, 0.07143820127010826), (0.5, 0.07638353661097617), (0.84, 0.08141618409214102)]
-Quantiles: [(0.16, 6.285239578433669), (0.5, 7.751931754738654), (0.84, 9.806841368383767)]
-Quantiles: [(0.16, 4.6660036759992005), (0.5, 5.4127164763439595), (0.84, 6.635770252926398)]
-Quantiles: [(0.16, 14.750498330640387), (0.5, 15.192855023535254), (0.84, 15.585939293526577)]
+Quantiles: [(0.16, 0.07167898754863827), (0.5, 0.07659888520137269), (0.84, 0.08143020768290565)]
+Quantiles: [(0.16, 6.3469525054075735), (0.5, 7.834631953247264), (0.84, 10.01465421992532)]
+Quantiles: [(0.16, 4.636596860991138), (0.5, 5.436055036040134), (0.84, 6.73622171023949)]
+Quantiles: [(0.16, 14.737995258738518), (0.5, 15.199272555845912), (0.84, 15.633713579507749)]
 
 Mean and acceptance fraction:
-$Q_{s0}^{2}$ (GeV²)= 0.076
-$e_c$= 8.599
-$C^{2}$= 5.793
-$\sigma_0/2$ (mb)= 15.548
-Mean acceptance fraction: 0.397
+$Q_{s0}^{2}$ (GeV²)= 0.077
+$e_c$= 8.417
+$C^{2}$= 6.192
+$\sigma_0/2$ (mb)= 15.173
+Mean acceptance fraction: 0.400
 
 Sampling over an even narrower parameter space to remove the outlier walkers give us the following:
 
 \begin{figure}
 \centering
-\includegraphics[width=0.5\textwidth]{figs\mve_100d_100w_narrower.png}
+\includegraphics[width=0.5\textwidth]{figs\mve_100d_100w_narrow.png}
 \caption{MVe run with 100 walkers with design points that have even smaller parameter space}
-\label{fig:mve_100d_100w_narrower}
+\label{fig:mve_100d_100w_narrow}
 \end{figure}
 
 Quantiles: [(0.16, 0.07042138348378785), (0.5, 0.0754394360116123), (0.84, 0.0812312219535772)]
