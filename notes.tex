@@ -39,7 +39,7 @@ We show here the chain of walkers in this run where some of the walkers are stuc
 \label{fig:mv_50d_100w}
 \end{figure}
 
-\section{MVe}
+\section{MVe adventures}
 
 With the MVe model, there are 4 free model parameters to be fitted against: $$Q_{s0}²$$ $$C²$$ $$\sigma_{0}/2$$ with the addition of $$e_c$$. The bounds of the LHS sampling of the parameters are: $Q_{s0}²$ = [0.001, 2.0] 1/GeV²; $C²$ = [0.1, 100.0], and $\sigma_{0}/2$ = [1.0, 40.0] mb. The bounds of $e_c$ are [0.5, 100.0]. In this run we aimed to sample 49 design points through both plain LHS and orthogonal LHS. In both cases the GPE performed very poorly with very large errors and off predictions. The next run is to try with more design points, specifically 121 design points.
 
@@ -206,29 +206,43 @@ $C^{2}$= 6.192
 $\sigma_0/2$ (mb)= 15.173
 Mean acceptance fraction: 0.400
 
-Sampling over an even narrower parameter space to remove the outlier walkers give us the following:
+\subsection{Final Training}
+
+To improve the sampling we initialize our walkers in a very narrow portion of the parameter space with the prior knowledge already of what the posterior median peaks are. The bounds of the initialization are l_bounds_in = [0.05, 7.0, 5.0, 14.0] and u_bounds_in = [0.09, 11.0, 7.0, 16.0]. The results converge pretty nicely and make very nice posterior distributions.
 
 \begin{figure}
 \centering
-\includegraphics[width=0.5\textwidth]{figs\mve_100d_100w_narrow.png}
+\includegraphics[width=0.5\textwidth]{figs\mve_100d_100w_narrowinit.png}
 \caption{MVe run with 100 walkers with design points that have even smaller parameter space}
 \label{fig:mve_100d_100w_narrow}
 \end{figure}
 
-Quantiles: [(0.16, 0.07042138348378785), (0.5, 0.0754394360116123), (0.84, 0.0812312219535772)]
-Quantiles: [(0.16, 6.315976026500409), (0.5, 7.902611886718099), (0.84, 10.187421279951657)]
-Quantiles: [(0.16, 4.5375863981247), (0.5, 5.377111454170131), (0.84, 6.800972081221537)]
-Quantiles: [(0.16, 14.713371518080658), (0.5, 15.227200628204383), (0.84, 15.696835034938939)]
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs\mve_100d_100w_narrowinit_chain.png}
+\caption{MVe run with 100 walkers with design points that have even smaller parameter space: chain}
+\label{fig:mve_100d_100w_narrow_chain}
+\end{figure}
 
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs\mve_100d_100w_narrowinit_logprob.png}
+\caption{MVe run with 100 walkers with design points that have even smaller parameter space: log prob}
+\label{fig:mve_100d_100w_narrow_logprob}
+\end{figure}
+
+With mean values:
 $Q_{s0}^{2}$ (GeV²)= 0.077
-$e_c$= 8.107
-$C^{2}$= 5.674
-$\sigma_0/2$ (mb)= 15.318
-Mean acceptance fraction: 0.371
+$e_c$= 8.039
+$C^{2}$= 5.589
+$\sigma_0/2$ (mb)= 15.185
+Mean acceptance fraction: 0.418
 
-I would prefer the first one because it has a higher acceptance fraction and better convergence.
+\subsection{Sampling from the Posterior and MAP estimates}
 
-One hundred parameter vectors are now obtained from these posterior distributions (saved in "mve_100d_100w_sampled_from_posterior.txt" file) and obtained model cross sections from these samples. These values are ploted against experimental data. Say, for example, at Q2 = 45.0 GeV and sqrt(s) = 318.0 GeV, we compare the training set vs 100 design points sampled in the posterior.
+One hundred parameter vectors are now obtained from these posterior distributions (saved in "mve_100d_100w_sampled_from_posterior.txt" file) and obtained model cross sections from these samples. All parameter samples were saved in "mve/100d_100w_allsamples.txt".
+
+These values are ploted against experimental data. Say, for example, at Q2 = 45.0 GeV and sqrt(s) = 318.0 GeV, we compare the training set vs 100 design points sampled in the posterior.
 
 \begin{figure}
 \centering
@@ -236,5 +250,51 @@ One hundred parameter vectors are now obtained from these posterior distribution
 \caption{Training set vs posterior samples at Q2 = 45.0 GeV and sqrt(s) = 318.0 GeV}
 \label{fig:mve_train_vs_post_45_318}
 \end{figure}
+
+This shows that the samples from the posterior match very well with data, this goes for other values of Q as well.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs\mve_post_vs_data_manyq2.png}
+\caption{Posterior samples vs data at different values of Q2}
+\label{fig:mve_post_vs_data_manyq2}
+\end{figure}
+
+We then obtain what are called MAP estimates (maximum a posteriori) which are the parameter values that maximize the posterior distribution. Using the scipy minimize function, we minimize the negative of the log posterior function. The MAP estimates are: [ 0.07696357  7.46144896  5.00327994 15.02871265]. These estimates are the ones presented as the "best fit" where the model cross sections match the data the most.
+
+Below we show a plot of the reduced cross sections calculated by the emulator using MAP estimates vs the data and also vs the posterior median where we also show the 68\% confidence interval at kinematical point Q² = 45.0 GeV and sqrt(s) = 318.0 GeV.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs\mve_map_vs_median_45_318.png}
+\caption{MAP vs median at Q2 = 45.0 GeV and sqrt(s) = 318.0 GeV}
+\label{fig:mve_map_vs_median_45_318}
+\end{figure}
+
+Also another one at same Q2 but sqrt(s) = 225.0 GeV.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs\mve_map_vs_median_45_225.png}
+\caption{MAP vs median at Q2 = 45.0 GeV and sqrt(s) = 225.0 GeV}
+\label{fig:mve_map_vs_median_45_225}
+\end{figure}
+
+Here we have smaller Q2 = 8.5 GeV and sqrt(s) = 251.0 GeV.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs\mve_map_vs_median_8pt5_251.png}
+\caption{MAP vs median at Q2 = 8.5 GeV and sqrt(s) = 251.0 GeV}
+\label{fig:mve_map_vs_median_8pt5_251}
+\end{figure}
+
+\section{2D Fourier Transform of Dipole Amplitude}
+
+Now that we are confident with the parameters obtained from the MVe parametrization of the initial BK, we calculate the 2D Fourier Transform of Dipole scattering amplitude to obtain its dependence on dipole momentum, k. Below we have the plot with the 90\% confidence interval around the median, calculated for all posterior samples. The median curve is calculated by using the posterior medians which is also equal to the median of all the S curves thanks to the linear dependence on Qs02 and e_c. 
+
+\section{MV⁵}
+Next thing we want to do is parametrize the initial condition of the rcBK model with 5 parameters, this time adding an extra parameter: the anomalous dimension gamma with bounds = [0.5, 2.0].
+
 
 \end{document}

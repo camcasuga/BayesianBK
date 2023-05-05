@@ -74,5 +74,27 @@ if model == 'mve':
 		lines.append(line)
 		i += 1
 
+if model == 'mv5':
+	l_bounds = [.001, .5, .5, 0.1, 1.] # Qs02 , ec, C2, sigma0/2, gamma
+	u_bounds = [1., 2.0, 100., 100., 40.] # we are using MVe where the anomalous dimension gamma = 1
+	n_params = 4
+	mylimits = np.array([l_bounds, u_bounds])
+	myparams = get_lhcsamples(n_params, 
+			   n_paramvectors, 
+			   param_limits = mylimits, 
+			   seed_ = 10, strength_ = type_lhs)
+	np.savetxt(model_dir + '/theta.dat', myparams, newline = '\n')
+	print('design points saved in: ./' + model_dir + '/theta.dat')
+	i = 0
+	lines = ['#!/bin/bash', '\n']
+	#myparams = np.vstack(np.loadtxt(model_dir + "/theta.dat", unpack = True)).T
+	print(myparams)
+	for qs02, gamma, ec, c2 in myparams[:, 0:4]:
+		#cmd = 'OMP_NUM_THREADS=2 ../rcbk/build/bin/rcbk -ic MV {} {} 0.01 {} -rc BALITSKY -alphas_scaling {} -maxy 12 -fast -output {}/bks/{}.dat'.format(str(qs02), str(ec), str(c2), model_dir, str(i))
+		#os.system(cmd)
+		line = "sbatch -J bk submitmve.sh {0} {} {1} {2} {3}".format(str(qs02), str(gamma) ,str(ec), str(c2),str(i))
+		lines.append(line)
+		i += 1
+
 
 np.savetxt('submit_bk_jobs_{}_{}_{}d.sh'.format(model, type_lhs_name, n_paramvectors), lines, newline = '\n', fmt='%s')
