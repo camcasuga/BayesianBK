@@ -32,8 +32,8 @@ isExist2 = os.path.exists(model_dir + '/bks')
 if not isExist2: os.mkdir(model_dir + '/bks')
 
 if model == 'mv':
-	l_bounds = [.001, .1, 1.] # Qs02 , C2, sigma0/2
-	u_bounds = [1., 100., 40.] # we are using MVe where the anomalous dimension gamma = 1
+	l_bounds = [.001, .1, 10.] # Qs02 , C2, sigma0/2
+	u_bounds = [0.2, 40., 30.] # we are using MVe where the anomalous dimension gamma = 1
 	n_params = 3
 	mylimits = np.array([l_bounds, u_bounds])
 	myparams = get_lhcsamples(n_params, 
@@ -53,8 +53,8 @@ if model == 'mv':
 		i += 1
 
 if model == 'mve':
-	l_bounds = [.001, .5, 0.1, 1.] # Qs02 , ec, C2, sigma0/2
-	u_bounds = [1., 100., 100., 40.] # we are using MVe where the anomalous dimension gamma = 1
+	l_bounds = [.001, .5, 0.1, 10.] # Qs02 , ec, C2, sigma0/2
+	u_bounds = [0.2, 40., 40., 30.] # we are using MVe where the anomalous dimension gamma = 1
 	n_params = 4
 	mylimits = np.array([l_bounds, u_bounds])
 	myparams = get_lhcsamples(n_params, 
@@ -75,9 +75,9 @@ if model == 'mve':
 		i += 1
 
 if model == 'mv5':
-	l_bounds = [.001, .5, .5, 0.1, 1.] # Qs02 , ec, C2, sigma0/2, gamma
-	u_bounds = [1., 2.0, 100., 100., 40.] # we are using MVe where the anomalous dimension gamma = 1
-	n_params = 4
+	l_bounds = [.001, .5, .5, 0.1, 10.] # Qs02 , ec, C2, sigma0/2, gamma
+	u_bounds = [1., 2.0, 40., 40., 30.] # we are using MVe where the anomalous dimension gamma = 1
+	n_params = 5
 	mylimits = np.array([l_bounds, u_bounds])
 	myparams = get_lhcsamples(n_params, 
 			   n_paramvectors, 
@@ -92,7 +92,7 @@ if model == 'mv5':
 	for qs02, gamma, ec, c2 in myparams[:, 0:4]:
 		#cmd = 'OMP_NUM_THREADS=2 ../rcbk/build/bin/rcbk -ic MV {} {} 0.01 {} -rc BALITSKY -alphas_scaling {} -maxy 12 -fast -output {}/bks/{}.dat'.format(str(qs02), str(ec), str(c2), model_dir, str(i))
 		#os.system(cmd)
-		line = "sbatch -J bk submitmve.sh {0} {} {1} {2} {3}".format(str(qs02), str(gamma) ,str(ec), str(c2),str(i))
+		line = "sbatch -J bk submitmv5.sh {0} {1} {2} {3} {4}".format(str(qs02), str(gamma) ,str(ec), str(c2),str(i))
 		lines.append(line)
 		i += 1
 
