@@ -291,10 +291,51 @@ Here we have smaller Q2 = 8.5 GeV and sqrt(s) = 251.0 GeV.
 
 \section{2D Fourier Transform of Dipole Amplitude}
 
-Now that we are confident with the parameters obtained from the MVe parametrization of the initial BK, we calculate the 2D Fourier Transform of Dipole scattering amplitude to obtain its dependence on dipole momentum, k. Below we have the plot with the 90\% confidence interval around the median, calculated for all posterior samples. The median curve is calculated by using the posterior medians which is also equal to the median of all the S curves thanks to the linear dependence on Qs02 and e_c. 
+Now that we are confident with the parameters obtained from the MVe parametrization of the initial BK, we calculate the 2D Fourier Transform of Dipole scattering amplitude to obtain its dependence on dipole momentum, k. Below we have the plot with the 90\% confidence interval around the median, calculated for all posterior samples. The median curve is calculated by obtaining the median of all the S curves. We also normalize to 1 to see the behavior of the 2 sigma bands. We also graph the $\tilde{S}(k) * \sigma_0$ to see if it increases the uncertainty at $k \approx 0.5$.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs\2dft.png}
+\caption{2D Fourier Transform of Dipole Amplitude for $\tilde{S}(k)$ and for $\tilde{S}(k) * \sigma_0/2$}
+
+This quantity is directly proportional to the $\gamma^{*} p$ cross section and from here we are able to calculate some observables.
+
 
 \section{MV⁵}
 Next thing we want to do is parametrize the initial condition of the rcBK model with 5 parameters, this time adding an extra parameter: the anomalous dimension gamma with bounds = [0.5, 2.0].
+
+Plain LHS 
+
+Quantiles:
+[(0.05, 0.045782859856284594), (0.5, 0.05543492264182054), (0.95, 0.06661149569226865)]
+Quantiles:
+[(0.05, 1.3870639184518465), (0.5, 1.4301393304216496), (0.95, 1.4839272857686474)]
+Quantiles:
+[(0.05, 20.101847091178612), (0.5, 22.815519854142842), (0.95, 27.788593309639523)]
+Quantiles:
+[(0.05, 1.3684870673643048), (0.5, 13.985924494545358), (0.95, 36.06654216113256)]
+Quantiles:
+[(0.05, 16.251319717434143), (0.5, 17.249373723299552), (0.95, 18.368478185474505)]
+
+$Q_{s0}^{2}$ (GeV²)= 0.057
+$\gamma$= 1.436
+$e_c$= 23.207
+$C^{2}$= 15.936
+$\sigma_0/2$ (mb)= 17.241
+Mean acceptance fraction: 0.494
+
+MAP estimates:  [ 0.05733286  1.42858461 22.66158827  0.47680259 17.12751157]
+log posterior at MAP:  5.947365490438621
+Median Values:  [ 0.05543492  1.43013933 22.81551985 13.98592449 17.24937372]
+log posterior at Median:  5.458375051856651
+16th percentile:  [ 0.04939945  1.40377401 21.18256894  4.16468208 16.64830279]
+84th percentile:  [ 0.06193141  1.46033701 25.5724797  28.95072419 17.90620395]
+5th percentile:  [ 0.04578286  1.38706392 20.10184709  1.36848707 16.25131972]
+95th percentile:  [ 0.0666115   1.48392729 27.78859331 36.06654216 18.36847819]
+
+OrthLHS
+
+
 
 
 \end{document}

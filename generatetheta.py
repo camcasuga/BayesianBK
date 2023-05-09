@@ -88,7 +88,7 @@ if model == 'mv5':
 	i = 0
 	lines = ['#!/bin/bash', '\n']
 	#myparams = np.vstack(np.loadtxt(model_dir + "/theta.dat", unpack = True)).T
-	print(myparams)
+	#print(myparams)
 	for qs02, gamma, ec, c2 in myparams[:, 0:4]:
 		#cmd = 'OMP_NUM_THREADS=2 ../rcbk/build/bin/rcbk -ic MV {} {} 0.01 {} -rc BALITSKY -alphas_scaling {} -maxy 12 -fast -output {}/bks/{}.dat'.format(str(qs02), str(ec), str(c2), model_dir, str(i))
 		#os.system(cmd)
