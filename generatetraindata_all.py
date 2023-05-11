@@ -8,14 +8,14 @@ from numba import njit, float64
 import time
 
 
-#folder = str(sys.argv[1]) # pathname to folder containing theta
-theta_file = "trainingdata4p100d_theta.dat" #folder + "/theta.dat"
+folder = str(sys.argv[1]) # pathname to folder containing theta
+theta_file = folder + "/theta.dat"
 myparams = np.vstack(np.loadtxt(theta_file, unpack = True)).T
 n_params_list = list(range(len(myparams)))
-folder = "../../Downloads/practice/mve100d"
+#folder = "../../Downloads/practice/mve100d"
 
 def get_file(index):
-    filename = '{0}/{1}.dat'.format(folder,index)
+    filename = '{0}/bks/{1}.dat'.format(folder,index)
     return str(filename)
 
 
@@ -153,4 +153,4 @@ amplitude_params_list_index, sigma0_half_list = n_params_list, myparams[:,-1]
 
 # generate and then save the training file
 my_array = generate_training_set(xbj_list, Q2_list, sqrt_s_list, amplitude_params_list_index, sigma0_half_list)
-np.savetxt('trainingdata4p100_all.dat', my_array, delimiter = " ", newline = "\n")
+np.savetxt('train3.dat', my_array, delimiter = " ", newline = "\n")

@@ -297,6 +297,8 @@ Now that we are confident with the parameters obtained from the MVe parametrizat
 \centering
 \includegraphics[width=0.5\textwidth]{figs\2dft.png}
 \caption{2D Fourier Transform of Dipole Amplitude for $\tilde{S}(k)$ and for $\tilde{S}(k) * \sigma_0/2$}
+\label{fig:2dft}
+\end{figure}
 
 This quantity is directly proportional to the $\gamma^{*} p$ cross section and from here we are able to calculate some observables.
 
@@ -328,14 +330,67 @@ MAP estimates:  [ 0.05733286  1.42858461 22.66158827  0.47680259 17.12751157]
 log posterior at MAP:  5.947365490438621
 Median Values:  [ 0.05543492  1.43013933 22.81551985 13.98592449 17.24937372]
 log posterior at Median:  5.458375051856651
-16th percentile:  [ 0.04939945  1.40377401 21.18256894  4.16468208 16.64830279]
-84th percentile:  [ 0.06193141  1.46033701 25.5724797  28.95072419 17.90620395]
-5th percentile:  [ 0.04578286  1.38706392 20.10184709  1.36848707 16.25131972]
-95th percentile:  [ 0.0666115   1.48392729 27.78859331 36.06654216 18.36847819]
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs\mv5_plainLHS_49d_100w_narrowinit.png}
+\caption{Plain LHS for MV⁵ for 49 parameter samples and 100 walkers}
+\label{fig:mv5_plainLHS_49d_100w_narrowinit}
+\end{figure}
+
+
 
 OrthLHS
+Worse convergence has been observed with no special point in sight. We do not need to put all details here.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs\mv5_orthLHS_49d_50w_noburn.png}
+\caption{Orthogonal LHS for MV⁵ for 49 parameter samples and 50 walkers}
+\label{fig:mv5_orthLHS_49d_50w_noburn}
+\end{figure}
+
+Finally, we arrive at a convergence when we take 100 parameter samples. 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{figs\mv5_plainLHS_100d_100w.png}
+    \caption{Plain LHS for MV⁵ for 100 parameter samples and 100 walkers initialized over the whole sampling space}
+    \label{fig:mv5_plainLHS_100d_100w}
+    \end{figure}
+
+Initialized over l_bounds_in = [0.08, 1.2, 30.0, 20.0, 13.0] and u_bounds_in = [0.10, 1.4, 35.0, 22.0, 15.0] centered around the peaks in the initial run. The results that we get 
 
 
+$Q_{s0}^{2}$ (GeV²)= 0.091
+$\gamma$= 1.328
+$e_c$= 32.891
+$C^{2}$= 20.953
+$\sigma_0/2$ (mb)= 14.203
+Mean acceptance fraction: 0.554
+
+MAP estimates:  [ 0.09073768  1.32758085 32.94110629 21.20867231 14.19780092]
+log posterior at MAP:  276.9905911240538
+Median Values:  [ 0.09068555  1.32842287 32.90234842 21.17309616 14.19753749]
+log posterior at Median:  276.9563399862609
+16th percentile:  [ 0.0870448   1.31631982 31.7634865  17.690841   13.84299718]
+84th percentile:  [ 0.09449405  1.34000273 34.02333374 24.28085456 14.56528966]
+5th percentile:  [ 0.08457204  1.30818409 31.0047895  14.05142087 13.61145861]
+95th percentile:  [ 0.09701679  1.34760964 34.73830742 26.40952993 14.8116317 ]
+
+ \begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs\mv5_plainLHS_100d_widegamma_100w.png}
+\caption{Plain LHS for MV⁵ for 100 parameter samples and 100 walkers}
+\label{fig:mv5_plainLHS_100d_widegamma_100w}
+ \end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs\mv5_plainLHS_100d_widegamma_100w_chain.png}
+\caption{Plain LHS for MV⁵ for 100 parameter samples and 100 walkers}
+\label{fig:mv5_plainLHS_100d_widegamma_100w_chain}
+\end{figure}
 
 
 \end{document}
