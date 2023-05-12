@@ -338,8 +338,6 @@ log posterior at Median:  5.458375051856651
 \label{fig:mv5_plainLHS_49d_100w_narrowinit}
 \end{figure}
 
-
-
 OrthLHS
 Worse convergence has been observed with no special point in sight. We do not need to put all details here.
 
@@ -359,8 +357,36 @@ Finally, we arrive at a convergence when we take 100 parameter samples.
     \label{fig:mv5_plainLHS_100d_100w}
     \end{figure}
 
-Initialized over l_bounds_in = [0.08, 1.2, 30.0, 20.0, 13.0] and u_bounds_in = [0.10, 1.4, 35.0, 22.0, 15.0] centered around the peaks in the initial run. The results that we get 
+\subsection{Many Different Guesses}
 
+The workflow of doing the emcee sampling is firstly initializing the walkers over the whole parameter space. This produces a posterior distribution that is peaked at particular positions in the parameter space but sometimes smallers peaks show. For this parametrization, the small peaks seam to be significant but much smaller than the main peak, anyway. 
+
+\subsubsection{Median Initialization}
+First and usual initialization technique we do is initialize the walkers over a small area around the median from the initial run. This produces a posterior distribution that is peaked at the same position as the initial run. This is what we want and usually we stop at this point.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs\mv5_plainLHS_100d_widegamma_100w_narrowinit.png}
+\caption{Plain LHS for MV⁵ for 100 parameter samples and 100 walkers initiazed around the median}
+\end{figure}
+
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs\mv5_plainLHS_100d_widegamma_100w.png}
+\caption{Plain LHS for MV⁵ for 100 parameter samples and 100 walkers}
+\label{fig:mv5_plainLHS_100d_widegamma_100w}
+\end{figure}
+    
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs\mv5_plainLHS_100d_widegamma_100w_chain.png}
+\caption{Plain LHS for MV⁵ for 100 parameter samples and 100 walkers}
+\label{fig:mv5_plainLHS_100d_widegamma_100w_chain}
+\end{figure}
+    
+Details
+Initialized over l_bounds_in = [0.08, 1.2, 30.0, 20.0, 13.0] and u_bounds_in = [0.10, 1.4, 35.0, 22.0, 15.0] centered around the peaks in the initial run. The results that we get 
 
 $Q_{s0}^{2}$ (GeV²)= 0.091
 $\gamma$= 1.328
@@ -373,24 +399,78 @@ MAP estimates:  [ 0.09073768  1.32758085 32.94110629 21.20867231 14.19780092]
 log posterior at MAP:  276.9905911240538
 Median Values:  [ 0.09068555  1.32842287 32.90234842 21.17309616 14.19753749]
 log posterior at Median:  276.9563399862609
-16th percentile:  [ 0.0870448   1.31631982 31.7634865  17.690841   13.84299718]
-84th percentile:  [ 0.09449405  1.34000273 34.02333374 24.28085456 14.56528966]
-5th percentile:  [ 0.08457204  1.30818409 31.0047895  14.05142087 13.61145861]
-95th percentile:  [ 0.09701679  1.34760964 34.73830742 26.40952993 14.8116317 ]
 
- \begin{figure}
-\centering
-\includegraphics[width=0.5\textwidth]{figs\mv5_plainLHS_100d_widegamma_100w.png}
-\caption{Plain LHS for MV⁵ for 100 parameter samples and 100 walkers}
-\label{fig:mv5_plainLHS_100d_widegamma_100w}
- \end{figure}
+\subsubsection{MVe Initialization}
+
+However, we notice something weird happening where if we initialize the walkers in the a different gamma region using the values obtained in our mve run (gamma = 1) but we initialize C² over all space, we notice a convergence in different areas of the parameter space. This is not what we want. We want to have a convergence in the same region of the parameter space independent of the area of initialization. Does this suggest a multimodal posterior for gamma when left as a free parameter?
+
+Let's examine.
 
 \begin{figure}
 \centering
-\includegraphics[width=0.5\textwidth]{figs\mv5_plainLHS_100d_widegamma_100w_chain.png}
-\caption{Plain LHS for MV⁵ for 100 parameter samples and 100 walkers}
-\label{fig:mv5_plainLHS_100d_widegamma_100w_chain}
+\includegraphics[width=0.5\textwidth]{figs\mv5_plainLHS_100d_widegamma_100w_mveinit.png}
+\caption{Plain LHS for MV⁵ for 100 parameter samples and 100 walkers initiazed around the MVe MAP/median values}
+\label{fig:mv5_plainLHS_100d_widegamma_100w_mveinit}
 \end{figure}
+
+The results are not converged in C².
+
+
+\subsubsection{MAP Initialization}
+We try a new technique by obtaining the MAP first with initial guess of gamma equal to that obtain in the rcbk paper. We use two different algorithms: minimize and basinhopping. We obtian the results here for the wide gamma range.
+
+Initial Guess for minimize:  [ 0.06  1.   18.9   7.2  16.36]
+minimize estimates:  [ 0.10165458  1.32284799 30.40428667  7.19999575 12.69743765]
+log posterior at minimize -307.8329182008889
+basinhopping estimates:  [ 0.10179309  1.32219056 30.50792323  6.2602836  12.68127956]
+log posterior at basinhopping -307.837620177625
+
+As predicted, the basinhopping does find a position where the negative of the log posterior is more minimized. The scipy.minimize has tendencies of finding local maxima around the initial guess, although this is okay for doing after finding the posteriors, it does not work in finding the global maxima of the posterior to initialize where the walkers are. 
+
+This way of initializing walkers is documented in the emcee documentation: https://readthedocs.org/projects/emcee/downloads/pdf/v2.2.1/.
+
+Unfortunately this does not work in converging all the parameters. 
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs\mv5_plainLHS_100d_widegamma_100w_mapinit.png}
+\caption{Plain LHS for MV⁵ for 100 parameter samples and 100 walkers initiazed around initial MAP values}
+\end{figure}
+
+
+Here we do a different initial guess for the optimize function.
+Initial Guess for minimize:  [ 0.07696357  1.          7.46144896  5.00327994 15.02871265]
+minimize estimates:  [ 0.07415565  0.84142315  0.58291575  5.00327994 17.92891779]
+log posterior at minimize -321.8459870643879
+basinhopping estimates:  [ 0.06515335  0.84548206  0.50806373  4.93496011 20.08486134]
+log posterior at basinhopping -326.35924880524703
+
+
+\subsection{Narrow Gamma Range}
+
+Oddly enough, the narrow gamma doesnot give proper convergence to other parameters. The MAP iinitialization:
+
+Initial Guess for minimize:  y supporting documents you’ve brought with you.
+
+[ 0.06  1.   18.9   7.2  16.36]
+minimize estimates:  [1.07561115e-03 8.42458262e-01 1.45164097e+01 7.97672770e+00  1.58412078e+01]
+log posterior at minimize -278.27712184232774
+basinhopping estimates:  [ 0.08242398  1.09395535 27.26378182 12.25817616 10.03228508]
+log posterior at basinhopping -338.53583454394544
+
+Sadly, it does not help in the convergence of the other parameters.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs\mv5_plainLHS_100d_100w_narrowinit.png}
+\end{figure}
+
+\subsection{Conclusion}
+Let's try it again for more training samples. It is clear that the log posteriors for these multiple solutions are so close to each other (300 to 400) that the emcee sampling is considering both of them as valid solutions. We move on to a narrower range of gamma with more samples. This time we try the orthogonal LHS now. 
+
+\subsection{121 Orthogonal LHS}
+
+
 
 
 \end{document}

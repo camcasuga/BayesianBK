@@ -78,7 +78,7 @@ if model == 'mv5':
 	#l_bounds = [.001, .5, .5, 0.1, 10.] # Qs02 , ec, C2, sigma0/2, gamma
 	#u_bounds = [1., 2.0, 40., 40., 30.] # we are using MVe where the anomalous dimension gamma = 1
 	l_bounds = [.001, .8, .5, 0.1, 10.] # Qs02 , ec, C2, sigma0/2, gamma
-	u_bounds = [1., 1.5, 40., 40., 30.] # we are using MVe where the anomalous dimension gamma = 1
+	u_bounds = [0.2, 1.5, 40., 40., 30.] # we are using MVe where the anomalous dimension gamma = 1
 	n_params = 5
 	mylimits = np.array([l_bounds, u_bounds])
 	myparams = get_lhcsamples(n_params, 
