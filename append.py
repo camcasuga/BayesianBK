@@ -1,14 +1,20 @@
 import numpy as np
 import sys
 
-n_samples = int(sys.argv[1])
-#type_lhs = str(sys.argv[2])
+model = str(sys.argv[1])
+n_paramvectors = int(sys.argv[2])
+type_lhs = int(sys.argv[3])
+
+if type_lhs == 1:
+	type_lhs_name = 'plainLHS'
+if type_lhs == 2:
+	type_lhs_name = 'orthLHS'
 
 # read all files in a folder
 def read_file(which_param):
-    folder = 'mv5/orthLHS/{}d/trains'.format(n_samples)
+    folder = '{}/{}/{}d/trains'.format(model,type_lhs_name, n_paramvectors)
     file_name = folder + '/' + str(which_param) + '.txt'
     return np.loadtxt(file_name)
 
-train = [read_file(i) for i in range(n_samples)]  
-np.savetxt('mv5/orthLHS/{}d/train.dat'.format(n_samples), train, newline = '\n', fmt='%s')
+train = [read_file(i) for i in range(n_paramvectors)]  
+np.savetxt('{}/{}/{}d/train.dat'.format(model, type_lhs_name, n_paramvectors), train, newline = '\n', fmt='%s')
