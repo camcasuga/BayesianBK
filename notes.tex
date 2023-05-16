@@ -468,8 +468,10 @@ Sadly, it does not help in the convergence of the other parameters.
 \subsection{Conclusion}
 Let's try it again for more training samples. It is clear that the log posteriors for these multiple solutions are so close to each other (300 to 400) that the emcee sampling is considering both of them as valid solutions. We move on to a narrower range of gamma with more samples. This time we try the orthogonal LHS now. 
 
-\subsection{121 Orthogonal LHS}
-
+\subsection{150 Plain LHS}
+We generate 150 parameter samples within bounds: 	
+l_bounds = [.001, 0.5, .5, 0.1, 10.]
+u_bounds = [0.2, 2.0, 40., 40., 30.]
 
 
 
