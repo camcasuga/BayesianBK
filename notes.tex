@@ -465,13 +465,122 @@ Sadly, it does not help in the convergence of the other parameters.
 \includegraphics[width=0.5\textwidth]{figs\mv5_plainLHS_100d_100w_narrowinit.png}
 \end{figure}
 
+\subsection{Mistake correction: Qs02 range}
+Mistake! We have been generating our parameter samples in a wide range of Qs02. Which was my mistake but it does not diminish the fact that our sampling is converging at different spots in the paramter space. The following results will now involve a Qs02 range that is from 0.001 to 2.0. More details: 20\% test values and 5 principal components.
+
+Here is a figure of the posterior distribution if we use different moves (choice is completely random and is the shortest implementation we can make besides the default stretch move). 
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs\mv5_plainLHS_100d_corr_100w_DEMovecomb.png}
+\caption(Plain LHS for the correct Qs02 range for 100 walkers and 100 parameter samples emcee using DEMove and DEsnookermove combination as walker move)
+\label{fig:mv5_plainLHS_100d_corr_100w_DEMovecomb}
+\end{figure}
+
+These peaks, without bias initialization, actually match the basinhopping estimates. 
+Initial Guess for minimize:  [ 0.07696357  1.          7.46144896  5.00327994 15.02871265]
+minimize estimates:  [ 0.04146776  0.94703643 17.52542191 13.71100446 10.02567683]
+log posterior at minimize -142.29413839385722
+basinhopping estimates:  [ 0.16870158  1.65652093 29.52744335  2.51967912 10.01630848]
+log posterior at basinhopping -396.51418335627807
+
+We have definitely found peaks. Problem is these values are the edges of our space. We also have these values
+
+$Q_{s0}^{2}$ (GeV²)= 0.166
+$\gamma$= 1.653
+$e_c$= 29.871
+$C^{2}$= 3.492
+$\sigma_0/2$ (mb)= 10.273
+Mean acceptance fraction: 0.218
+
+
 \subsection{Conclusion}
-Let's try it again for more training samples. It is clear that the log posteriors for these multiple solutions are so close to each other (300 to 400) that the emcee sampling is considering both of them as valid solutions. We move on to a narrower range of gamma with more samples. This time we try the orthogonal LHS now. 
+
+Let's try it again for more training samples. It is clear that the log posteriors for these multiple solutions are so close to each other (300 to 400) that the emcee sampling is considering both of them as valid solutions. Also we realize that different initializations give different median values which something we do not trust. If we were to decrease our Qs0_2 range, we would count on a better convergence. Walkers are stuck in islands of local maxima. 
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs\walkersinislands.png}'
+\caption{Walkers in islands of local maxima}
+\end{figure}
+
 
 \subsection{150 Plain LHS}
 We generate 150 parameter samples within bounds: 	
 l_bounds = [.001, 0.5, .5, 0.1, 10.]
 u_bounds = [0.2, 2.0, 40., 40., 30.]
+
+We emcee sample, using a combination of DEMove and DEsnookermove over the whole parameter space and with more burn walks (2000) and 1000 walk samples, we find this final distribution that seem to have converged at two log posterior values. 
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs\mv5_plainLHS_150d_100w_morewalks.png}
+\caption{Plain LHS for 150 parameter samples and 100 walkers using a combination of DEMove and DEsnookermove}
+\end{figure}
+
+They seem to converge at two log posterior values. I guess because we are using a move combination meant for multimodal distributions, it might be more multimodal friendly hence the two peaks. If we swith to the default stretch move with still this much walkers, maybe we can get a better single peak. 
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs\mv5_plainLHS_150d_100w_morewalks.png}
+\caption{Plain LHS for 150 parameter samples and 100 walkers using a default stretch move}
+\end{figure}
+
+However we already see a pattern here. That the the paramter value for sigma0/2 skews toward the lower bound 10.0 mb. This might be consistent with the prescription for $$ \sigma_0 = 4\pi B_D $$ where $B_D \approx 4$ GeV giving $ \sigma_0 = 19.5 $ mb.
+
+In both cases, we see that there are 2 or more peaks usually present. We wonder if there is a possibility that the log posterior is multimodal; however, one is has log probability higher than the other. 
+
+Peak 1
+
+l_bounds_in = [0.16, 1.0, 10.0, 4.0, 10.0] 
+u_bounds_in = [0.19, 1.2, 12.0, 6.0, 14.0]
+$Q_{s0}^{2}$ (GeV²)= 0.122
+$\gamma$= 1.132
+$e_c$= 11.482
+$C^{2}$= 7.786
+$\sigma_0/2$ (mb)= 10.020
+Mean acceptance fraction: 0.419
+
+MAP peak near median values: [ 0.1177862   1.10460418 11.45378404  5.6573639  10.01140716]
+log posterior at MAP -355.80632170516776
+
+Peak 2
+
+$Q_{s0}^{2}$ (GeV²)= 0.178
+$\gamma$= 1.543
+$e_c$= 15.730
+$C^{2}$= 5.906
+$\sigma_0/2$ (mb)= 10.018
+Mean acceptance fraction: 0.459
+
+MAP peak near median values: [ 0.17985022  1.5528701  15.61781138  4.17604652 10.01358633]
+log posterior at MAP -332.620602059257
+
+Peak 3: initialized at 
+l_bounds_in = [0.05, 0.75, 3.0, 24.0, 17.0]
+u_bounds_in = [0.07, 0.90, 6.0, 32.0, 20.0]
+from the mve peak in the first mv5 run
+
+$Q_{s0}^{2}$ (GeV²)= 0.112
+$\gamma$= 1.130
+$e_c$= 11.795
+$C^{2}$= 7.944
+$\sigma_0/2$ (mb)= 11.218
+Mean acceptance fraction: 0.365
+
+MAP peak near median values: [ 0.11594505  1.10091539 11.50380359  5.69849215 10.00481906]
+log posterior at MAP -356.0391175944104
+
+
+Peak 4: initialized at
+l_bounds_in = [0.08, 1.30, 30.0, 16.0, 13.0]
+u_bounds_in = [0.10, 1.35, 36.0, 24.0, 15.0]
+from the narrow initialization peak at the first mv5 runs
+
+MAP peak near median values: [ 0.17978322  1.5515433  15.61865206  4.93474362 10.0004294 ]
+log posterior at MAP -333.23268041177596
+
+\subsection{5 to 30 sigma0}
 
 
 
