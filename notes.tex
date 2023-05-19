@@ -582,6 +582,93 @@ log posterior at MAP -333.23268041177596
 
 \subsection{5 to 30 sigma0}
 
+We now choose to accomodate lower sigma values by generating 100 parameter samples within $ sigma_0/2$ bounds of [5.0, 30.0] mb. Our GPE was trained on 95\% of the training data and we use 5 principal components. This is how the GPE performs for 1 kinematical point. 
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs\mv5_100d_widesig_gpe.png}
+\caption{This is how the GPE performs for 1 kinematical point.}
+\label{fig:mv5_100d_widesig_gpe}
+\end{figure}
+
+If we were to plot including the rest of the training data as predicted by the emulator, we can already see that the points in the area near the experimental value (red dashed line) are spread out over the parameter space. This is is already telling us that we are not going to get a good convergence with at least one parameter.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs\mv5_100d_widesig_gpewtrain.png}
+\label{fig:mv5_100d_widesig_gpewtrain}
+\end{figure}
+
+To demonstrate how well the GPE predicts the true value we have
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs\mv5_100d_widesig_truevsemulator.png}
+\label{fig:mv5_100d_widesig_truevsemulator}
+\end{figure}
+
+Before the emcee sampling we obtain the maximum likelihood estimate with our MVe fit as our initial guess. 
+
+Initial Guess for minimize:  [ 0.07696357  1.          7.46144896  5.00327994 15.02871265]
+minimize estimates:  [0.06205937 0.72961686 7.65768351 0.11618492 6.57964291]
+log posterior at minimize -287.95912825019485
+basinhopping estimates:  [ 0.17360683  1.15526819 21.19773806  0.12073372  7.57386963]
+log posterior at basinhopping -450.4525064643876
+
+We now notice that the log posterior is now higher that what we have been obtained before (300 to 400) in value. This is because we are now including lower values of sigma0/2 and we are getting a peak in that particular sigma0 value.
+
+Doing the emcee sampling gives
+
+$Q_{s0}^{2}$ (GeV²)= 0.165
+$\gamma$= 1.175
+$e_c$= 31.596
+$C^{2}$= 15.785
+$\sigma_0/2$ (mb)= 7.875
+Mean acceptance fraction: 0.498
+
+initialized over the MAP/median:
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs\mv5_100d_widesig_100w_mapinit.png}
+\label{fig:mv5_100d_widesig_100w_mapinit}
+\end{figure}
+
+If initialized over the whole parameter space:
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs\mv5_100d_widepa_100w.png}
+\end{figure}
+
+The MAP and quantiles after the sampling gives:
+
+MAP peak near median values: [ 0.16534322  1.17461103 31.85276639 13.81752716  7.87315309]
+log posterior at MAP -454.7671960078395
+
+Quantiles:
+[(0.05, 0.15996811302457686), (0.5, 0.1653432155663504), (0.95, 0.17084447244578327)]
+Quantiles:
+[(0.05, 1.1529871653398143), (0.5, 1.1746110342289464), (0.95, 1.1971785944900537)]
+Quantiles:
+[(0.05, 27.852611188526048), (0.5, 31.85276638650362), (0.95, 34.41680340207605)]
+Quantiles:
+[(0.05, 1.2736096229122937), (0.5, 13.817527162731485), (0.95, 36.22937128001576)]
+Quantiles:
+[(0.05, 7.633320256614064), (0.5, 7.873153093082774), (0.95, 8.118955618073185)]
+
+
+If we were to take 100 random samples from the posterior distribution, and plot them against the experimental values, we get
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs\mv5_100d_widepa_posteriorsamples_45_318.png}
+\label{fig:mv5_100d_widepa_posteriorsamples_45_318}
+\end{figure}
+
+Personally, this is the result i trust the most and I do not think more samples will give us a convergence for C² as it seems all values of C² give back the same log posterior value. From the 2D histograms, there doesnt seem to be any correlation with C² and the other parameters (at least in this case). In the MVe case, we have a direct correlation between C² and $sigma_0/2$.
+
+\subsection{Direct Log Posterior Calculation from BK}
+
 
 
 \end{document}
