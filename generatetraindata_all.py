@@ -8,14 +8,15 @@ from numba import njit, float64
 import time
 
 
-folder = str(sys.argv[1]) # pathname to folder containing theta
-theta_file = folder + "/theta.dat"
+#folder = str(sys.argv[1]) # pathname to folder containing theta
+#theta_file = folder + "/theta.dat"
+theta_file = 'test.dat'
 myparams = np.vstack(np.loadtxt(theta_file, unpack = True)).T
 n_params_list = list(range(len(myparams)))
 #folder = "../../Downloads/practice/mve100d"
 
 def get_file(index):
-    filename = '{0}/bks/{1}.dat'.format(folder,index)
+    #filename = '{0}/bks/{1}.dat'.format(folder,index)
     return str(filename)
 
 
@@ -26,7 +27,7 @@ def ReadBKDipole(index): #
     
     Note: as this interpolates in r and not in log r, at very small r there are some small interpolation errors
     '''
-    thefile = get_file(index)
+    thefile =  'test_bk.dat' #get_file(index)
     
     with open(thefile) as f:
         content = f.read().split("###")
@@ -109,14 +110,14 @@ def integrand(z, r, xbj, Q2, sqrt_s): # contains only kinematical points
     mult = (y**2)/(1+(1-y)**2)
     return (1/(4*pow(pi,3))) * (F2(bess0, bess1, ai, z, m, Q2) - mult * sigmaL(bess0, Q2, z))
 
-def intz(r, xbj, Q2, sqrt_s, index): # this is where the fitting parameters go into the intergrand
+def intz(r, xbj, Q2, sqrt_s): # this is where the fitting parameters go into the intergrand
     return integrate.quad(integrand, 0.0, 1.0, args = (r, xbj, Q2, sqrt_s))[0] # integrates over z, returns only a function of r
 
 def intzr(r, xbj, Q2, sqrt_s, index):
     x0 = 0.01
     y_int = np.log(x0/xbj)
     dip = interpolators[index]
-    return r * dip(y_int,r) * intz(r, xbj, Q2, sqrt_s, index)
+    return r * dip(y_int,r) * intz(r, xbj, Q2, sqrt_s)
 
 def get_sigmar(xbj, Q2, sqrt_s, index, sigma0_half):
     sigma0 = 2.56819 * 2 * sigma0_half # converts to 1/GeV²
@@ -134,7 +135,7 @@ def generate_training_set(xbj_list, Q2_list, sqrt_s_list, amplitude_params_list_
     supplement = [] # contain list of 
     for i in range(len(amplitude_params_list_index)):
         #print("currently at {}th parameter out of {} design points".format(i+1, len(amplitude_params_list_index)))
-        st = time.time()
+        #st = time.time()
         
         diff_kinematics = [get_sigmar(xbj_list[j], 
                                       Q2_list[j], 
@@ -142,10 +143,10 @@ def generate_training_set(xbj_list, Q2_list, sqrt_s_list, amplitude_params_list_
                                       amplitude_params_list_index[i], 
                                       sigma0_half_list[i]) for j in range(len(xbj_list))]
         
-        et = time.time()
+        #et = time.time()
         #print(diff_kinematics)
         trainingset.append(diff_kinematics)
-        print("time taken at design point number {}: {} seconds".format(i+1, et-st))    
+        #print("time taken at design point number {}: {} seconds".format(i+1, et-st))    
     return trainingset
 
 xbj_list, Q2_list, sqrt_s_list = np.loadtxt('exp_all.dat', usecols = (0,1,2), unpack = True)
@@ -153,4 +154,4 @@ amplitude_params_list_index, sigma0_half_list = n_params_list, myparams[:,-1]
 
 # generate and then save the training file
 my_array = generate_training_set(xbj_list, Q2_list, sqrt_s_list, amplitude_params_list_index, sigma0_half_list)
-np.savetxt('train3.dat', my_array, delimiter = " ", newline = "\n")
+np.savetxt('aa.dat', my_array, delimiter = " ", newline = "\n")
