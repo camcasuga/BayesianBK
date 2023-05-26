@@ -53,7 +53,7 @@ if model == 'mv':
 		i += 1
 
 if model == 'mve':
-	l_bounds = [.001, .5, 0.1, 10.] # Qs02 , ec, C2, sigma0/2
+	l_bounds = [.001, .5, 0.1, 5.] # Qs02 , ec, C2, sigma0/2
 	u_bounds = [0.2, 40., 40., 30.] # we are using MVe where the anomalous dimension gamma = 1
 	n_params = 4
 	mylimits = np.array([l_bounds, u_bounds])
@@ -65,7 +65,7 @@ if model == 'mve':
 	print('design points saved in: ./' + model_dir + '/theta.dat')
 	i = 0
 	lines = ['#!/bin/bash', '\n']
-	#myparams = np.vstack(np.loadtxt(model_dir + "/theta.dat", unpack = True)).T
+	#myparams = np.vstack(np.loadtxt(model_dir + ght+sigmar_c+sigm/theta.dat", unpack = True)).T
 	print(myparams)
 	for qs02, ec, c2 in myparams[:, 0:3]:
 		#cmd = 'OMP_NUM_THREADS=2 ../rcbk/build/bin/rcbk -ic MV {} 1 0.01 {} -rc BALITSKY -alphas_scaling {} -maxy 12 -fast -output {}/bks/{}.dat'.format(str(qs02), str(ec), str(c2), model_dir, str(i))
