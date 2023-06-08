@@ -4,14 +4,14 @@ from scipy import interpolate, integrate
 from scipy.special import k0,k1
 
 #folder = str(sys.argv[1]) # pathname to folder containing theta
-folder = "mve/orthLHS/121d"
+folder = "mve/plainLHS/100d"
 theta_file = folder + "/theta.dat"
 myparams = np.vstack(np.loadtxt(theta_file, unpack = True)).T
 which_bk = int(sys.argv[1]) # which bk file
 
 
 def get_file():
-    filename = '{0}/bks/{1}.dat'.format(folder,which_bk)
+    filename = folder + "/bks/0.dat" #'{0}/bks/{1}.dat'.format(folder,which_bk)
     return str(filename)
 
 def ReadBKDipole(): # 
@@ -128,6 +128,7 @@ def generate_training_set(xbj_list, Q2_list, sqrt_s_list, sigma0_half):
     diff_kinematics = []
         
     for j in range(len(xbj_list)):
+        print(xbj_list[j], Q2_list[j], sqrt_s_list[j], sigma0_half)
         xsec = get_sigmar(xbj_list[j], Q2_list[j], sqrt_s_list[j], sigma0_half)
         diff_kinematics.append(xsec)
         

@@ -77,14 +77,14 @@ if model == 'mve':
 if model == 'mv5':
 	#l_bounds = [.001, .5, .5, 0.1, 10.] # Qs02 , ec, C2, sigma0/2, gamma
 	#u_bounds = [1., 2.0, 40., 40., 30.] # we are using MVe where the anomalous dimension gamma = 1
-	l_bounds = [.001, 0.5, .5, 0.1, 5.] # Qs02 , ec, C2, sigma0/2, gamma
-	u_bounds = [0.2, 2.0, 40., 40., 30.] # we are using MVe where the anomalous dimension gamma = 1
+	l_bounds = [.001, 0.5, 0.5, 0.1, 5.0] # Qs02 , ec, C2, sigma0/2, gamma
+	u_bounds = [0.2, 2.0, 40.0, 40.0, 30.0] # we are using MVe where the anomalous dimension gamma = 1
 	n_params = 5
 	mylimits = np.array([l_bounds, u_bounds])
 	myparams = get_lhcsamples(n_params, 
 			   n_paramvectors, 
 			   param_limits = mylimits, 
-			   seed_ = 10, strength_ = type_lhs)
+			   seed_ = 12, strength_ = type_lhs)
 	np.savetxt(model_dir + '/theta.dat', myparams, newline = '\n')
 	print('design points saved in: ./' + model_dir + '/theta.dat')
 	i = 0
