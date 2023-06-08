@@ -667,7 +667,292 @@ If we were to take 100 random samples from the posterior distribution, and plot 
 
 Personally, this is the result i trust the most and I do not think more samples will give us a convergence for C² as it seems all values of C² give back the same log posterior value. From the 2D histograms, there doesnt seem to be any correlation with C² and the other parameters (at least in this case). In the MVe case, we have a direct correlation between C² and $sigma_0/2$.
 
-\subsection{Direct Log Posterior Calculation from BK}
+\section{DIGRESSION: Running Coupling BK}
+
+Correction! For the past final runs we have been running our BK code without the running coupling! This has made everything very difficult to converge with our dipole amplitude. We now run the code with the running coupling and we get a much better convergence, hopefully. We notice that because we have a constant alpha, the correlation to C² has been irrelevant which is effing up GPE supposedly learnig our parameter dependences
+
+(Diary: I feel very stupid but now I am very relieved we have found something wrong with our code way before the initial stages conference)
+
+The following sections will now describe the new results with the running coupling. Ugh feeling so stupid. 
+
+\subsection{MVe 100d}
+With the proper settings for the BK code, we start by generating a new training set of parameters with bounds: 
+
+l_bounds = [.001, .5, 0.1, 5.] 
+u_bounds = [0.2, 40., 40., 30.]
+
+This is a very conservative and wide range around the initial values from the rcbk paper. Below we have a scatterplot of the two, out of four, parameters:
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs_results\scatterplot_mve_plainLHS_100d.png}
+\label{fig:scatterplot_mve_plainLHS_100d}
+\end{figure}
+
+This is how our GPE performs with 10 (10 parameter sets) percent validation data using 3 principal components:
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs_results\gpevstrue_10percentval_mve_plainLHS_100d.png}
+\label{fig:gpevstrue_10percentval_mve_plainLHS_100d}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs_results\gpezscorehist_mve_plainLHS_100d.png}
+\label{fig:gpezscorehist_mve_plainLHS_100d}
+\end{figure}
+
+The zscore is not so defined because we do not have enough validation data yet.This is the initial MLE
+
+Initial Guess for minimize:  [ 0.06 18.9   7.2  16.36]
+minimize estimates:  [ 0.11323903 15.41952131  8.5393818  11.27157063]
+log likelihod at minimize -495.9526068377461
+basinhopping estimates:  [ 0.11323903 15.41952131  8.5393818  11.27157063]
+log likelihood at basinhopping -495.9526068377461
+
+Without consideration of the MLE, we now run the emcee sampling with 100 walkers, 1500 burning steps, and 1000 sample steps. We get the following
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs_results\corner_mve_plainLHS_100d_100w_1000steps.png}
+\label{fig:corner_mve_plainLHS_100d_100w_1000steps}
+\caption{Corner plot for MVe with 100 walkers, 1000 steps, and 1500 burning steps}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs_results\chain_mve_plainLHS_100d_100w_1000steps.png}
+\label{fig:chain_mve_plainLHS_100d_100w_1000steps}
+\caption{Chain of 100 walkers for MVe with 1000 steps after 1500 burning steps}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs_results\logpost_mve_plainLHS_100d_100w_1000steps.png}
+\label{fig:logpost_mve_plainLHS_100d_100w_1000steps}
+\caption{Log posterior for MVe with 100 walkers, 1000 steps, and 1500 burning steps}
+\end{figure}
+
+With the following MAP and quantiles:
+MAP estimates:  [ 0.03855958 28.98776148 11.65876821 21.52294763]
+log posterior at MAP:  -511.89136912989363
+Median Values:  [ 0.04096007 27.23007206 13.10284683 21.26490288]
+log posterior at Median:  -510.69736383443234
+16th percentile:  [ 0.03715249 18.06173012 10.85745121 19.94076357]
+84th percentile:  [ 0.05207725 30.1902331  18.73179879 22.44400661]
+5th percentile:  [ 0.0351698   6.97064875  9.68815287 16.88266891]
+95th percentile:  [ 0.0731803  31.67487809 27.91763909 23.15322535]
+
+We see smaller multiple peaks in the data initialized over the whole parameter space. First , we initialize at the MLE within bounds with 100 walkers, 500 burn steps, and 1000 sample steps within bounds
+l_bounds_in = [0.10, 14.0, 8.0, 10.0]
+u_bounds_in = [0.12, 16.0, 9.0, 12.0]
+
+
+$Q_{s0}^{2}$ (GeV²)= 0.109
+$e_c$= 17.905
+$C^{2}$= 11.628
+$\sigma_0/2$ (mb)= 11.791
+Mean acceptance fraction: 0.341
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{figs_results\corner_mleinit_mve_plainLHS_100d_100w_1000steps.png}
+    \label{fig:corner_mve_plainLHS_100d_100w_1000steps}
+    \caption{Corner plot for MVe with 100 walkers, 1000 steps, and 1500 burning steps}
+    \end{figure}
+    
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{figs_results\chain_mleinit_mve_plainLHS_100d_100w_1000steps.png}
+    \label{fig:chain_mve_plainLHS_100d_100w_1000steps}
+    \caption{Chain of 100 walkers for MVe with 1000 steps after 1500 burning steps}
+    \end{figure}
+    
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{figs_results\logpost_mleinit_mve_plainLHS_100d_100w_1000steps.png}
+    \label{fig:logpost_mve_plainLHS_100d_100w_1000steps}
+    \caption{Log posterior for MVe with 100 walkers, 1000 steps, and 1500 burning steps}
+    \end{figure}
+
+with MAP and quantiles:
+MAP estimates:  [ 0.11338489 15.40544123  8.56521016 11.26929455]
+log posterior at MAP:  -495.95265455626554
+Median Values:  [ 0.10974427 16.97011444 11.00649319 11.5967306 ]
+log posterior at Median:  -494.4843741439737
+16th percentile:  [ 0.08479903 13.48144695  7.51520175 10.40602992]
+84th percentile:  [ 0.13193019 22.74539975 15.35394182 13.22878054]
+5th percentile:  [ 0.07116452 11.54951612  5.87960293  9.8023258 ]
+95th percentile:  [ 0.14307061 27.48136452 20.40392796 14.42973239]
+
+Next, we initialize at the MAP found when sampled across the whole parameter space. It is possibly here we find a larger log posterior as it is the peak of our overall corner plots. Bounds of initialization are below:
+
+l_bounds_in = [0.03, 28.0, 10.0, 20.0]
+u_bounds_in = [0.045, 30.0, 13.0, 23.0]
+
+After sampling we get
+$Q_{s0}^{2}$ (GeV²)= 0.100
+$e_c$= 18.591
+$C^{2}$= 11.975
+$\sigma_0/2$ (mb)= 12.527
+Mean acceptance fraction: 0.291
+
+MAP estimates:  [ 0.11333527 15.41097412  8.56190415 11.27094642]
+log posterior at MAP:  -495.95265311268224
+Median Values:  [ 0.10177031 17.6028352  10.91780261 12.04230497]
+log posterior at Median:  -493.9036650212643
+16th percentile:  [ 0.07546727 13.38168221  7.45893022 10.6480886 ]
+84th percentile:  [ 0.12550169 24.84696767 16.45652552 14.11472186]
+5th percentile:  [ 0.0551643  11.18612231  5.82908206  9.94279274]
+95th percentile:  [ 0.13917305 28.74728581 22.41396292 17.19368897]
+
+Weirdly enough it converges to the values we have for the MLE initialization. Super weird. 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{figs_results\corner_mapinit_mve_plainLHS_100d_100w_1000steps.png}
+    \label{fig:corner_mve_plainLHS_100d_100w_1000steps}
+    \caption{Corner plot for MVe with 100 walkers, 1000 steps, and 1500 burning steps}
+    \end{figure}
+    
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{figs_results\chain_mapinit_mve_plainLHS_100d_100w_1000steps.png}
+    \label{fig:chain_mve_plainLHS_100d_100w_1000steps}
+    \caption{Chain of 100 walkers for MVe with 1000 steps after 1500 burning steps}
+    \end{figure}
+    
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{figs_results\logpost_mapinit_mve_plainLHS_100d_100w_1000steps.png}
+    \label{fig:logpost_mve_plainLHS_100d_100w_1000steps}
+    \caption{Log posterior for MVe with 100 walkers, 1000 steps, and 1500 burning steps}
+    \end{figure}
+
+\subsection{MVe Final run: 150d + 100d}
+
+All space:
+
+$Q_{s0}^{2}$ (GeV²)= 0.068
+$e_c$= 16.666
+$C^{2}$= 10.763
+$\sigma_0/2$ (mb)= 15.645
+Mean acceptance fraction: 0.244
+
+MAP estimates:  [ 0.06891901 14.11486642  7.10706548 15.34927249]
+log posterior at MAP:  -670.966442445333
+Median Values:  [ 0.06800233 15.73243371  9.06995804 15.8023891 ]
+log posterior at Median:  -666.8572017555738
+16th percentile:  [ 0.05726634 12.08819432  5.29716563 13.98436032]
+84th percentile:  [ 0.07523352 21.65815701 15.4180231  17.13816873]
+5th percentile:  [ 0.05353241  9.7497372   3.9701055  12.30991871]
+95th percentile:  [ 0.08123627 26.82585041 23.88833289 18.09333391]
+
+\subsection{MVe Fun run: 150d + 100d + 100d from old}
+
+MLE:
+Initial Guess for minimize:  [ 0.06 18.9   7.2  16.36]
+minimize estimates:  [ 0.07117897 11.30481376  8.59531173 15.83755353]
+log likelihod at minimize -765.3608476327252
+basinhopping estimates:  [ 0.07161057 11.00851548  8.56620295 15.8363871 ]
+log likelihood at basinhopping -765.3629807322499
+
+
+$Q_{s0}^{2}$ (GeV²)= 0.076
+$e_c$= 11.061
+$C^{2}$= 9.660
+$\sigma_0/2$ (mb)= 16.117
+Mean acceptance fraction: 0.296
+
+MAP estimates:  [ 0.07165612 10.94819215  8.59107696 15.84250344]
+log posterior at MAP:  -765.3630819058139
+Median Values:  [ 0.07281154 10.26284196  8.34339746 15.79269375]
+log posterior at Median:  -764.6322071974521
+16th percentile:  [ 0.06758267  7.40131886  6.35367257 15.3580034 ]
+84th percentile:  [ 0.07995473 13.50842408 10.7028648  16.41252498]
+5th percentile:  [ 0.0574425   5.92038217  5.54076262 15.03690412]
+95th percentile:  [ 0.08615401 17.03024553 18.09791811 19.25627032]
+
+Initialization within bounds:
+l_bounds_in = [0.06, 10.0, 8.0, 15.0]
+u_bounds_in = [0.08, 12.0, 9.0, 16.0]
+
+$Q_{s0}^{2}$ (GeV²)= 0.074
+$e_c$= 10.116
+$C^{2}$= 7.954
+$\sigma_0/2$ (mb)= 15.739
+Mean acceptance fraction: 0.375
+
+MAP estimates:  [ 0.07168117 10.96071064  8.57099545 15.83608681]
+log posterior at MAP:  -765.3632002684986
+Median Values:  [ 0.07379365  9.82566967  8.0001657  15.72847621]
+log posterior at Median:  -762.9743928153767
+16th percentile:  [ 0.06898731  7.41251234  6.22145791 15.32217316]
+84th percentile:  [ 0.07959715 12.87047087  9.36299615 16.15588475]
+5th percentile:  [ 0.06654958  6.38188942  5.56832885 15.03947342]
+95th percentile:  [ 0.08319857 14.81438877 10.52995611 16.49852548]
+
+\subsection{500d}
+
+Initial Guess for minimize:  [ 0.06 18.9   7.2  16.36]
+minimize estimates:  [ 0.06395988 18.85245278  7.47916375 15.59190898]
+log likelihod at minimize -769.8435931213369
+basinhopping estimates:  [ 0.07787933  8.24674933  8.45286029 15.62480102]
+log likelihood at basinhopping -771.2785231496066
+
+$Q_{s0}^{2}$ (GeV²)= 0.075
+$e_c$= 15.564
+$C^{2}$= 8.640
+$\sigma_0/2$ (mb)= 15.152
+Mean acceptance fraction: 0.194
+
+MAP estimates:  [ 0.06955271 14.73904204  5.33722533 14.5796246 ]
+log posterior at MAP:  -772.8436274247254
+Median Values:  [ 0.07206382 14.72095305  5.33775362 14.48972414]
+log posterior at Median:  -740.3622741992931
+16th percentile:  [ 0.06618271  9.78470761  4.56681078 13.76685355]
+84th percentile:  [ 0.07894836 19.47316302  8.91808686 15.69073871]
+5th percentile:  [ 0.04782599  7.20448792  4.12705185 13.33054411]
+95th percentile:  [ 0.12051615 36.18199991 34.38082471 25.10545214]
+
+MLE basinhopping initialization
+l_bounds_in = [0.07, 8.0, 8.0, 15.0]
+u_bounds_in = [0.08, 9.0, 9.0, 16.0]
+$Q_{s0}^{2}$ (GeV²)= 0.072
+$e_c$= 14.711
+$C^{2}$= 5.873
+$\sigma_0/2$ (mb)= 14.666
+Mean acceptance fraction: 0.256
+
+MAP estimates:  [ 0.07005059 15.21034367  5.2487737  14.45875503]
+log posterior at MAP:  -773.0108249245484
+Median Values:  [ 0.07145721 15.10797685  5.28489043 14.53440092]
+log posterior at Median:  -738.3305238581818
+16th percentile:  [ 0.0669564   9.7019393   4.60212803 13.91702448]
+84th percentile:  [ 0.07743309 19.21658998  7.67840886 15.44066853]
+5th percentile:  [ 0.06445767  7.54481504  4.19429881 13.61027097]
+95th percentile:  [ 0.08127594 21.06182953  8.95042367 15.96366412]
+
+MLE minimize initialization
+l_bounds_in = [0.06, 18.0, 8.0, 15.0]
+u_bounds_in = [0.07, 20.0, 9.0, 16.0]
+$Q_{s0}^{2}$ (GeV²)= 0.071
+$e_c$= 15.645
+$C^{2}$= 5.666
+$\sigma_0/2$ (mb)= 14.614
+Mean acceptance fraction: 0.286
+
+
+MAP estimates:  [ 0.06873919 16.24187476  5.26043681 14.53432511]
+log posterior at MAP:  -773.2360504303007
+Median Values:  [ 0.07062155 16.2205972   5.27232179 14.5369759 ]
+log posterior at Median:  -736.4421375626798
+16th percentile:  [ 0.06619785 11.23307499  4.54673174 13.90675328]
+84th percentile:  [ 0.0756416  19.3657534   7.12498597 15.36149611]
+5th percentile:  [ 0.06347454  9.20272228  4.08004464 13.57408794]
+95th percentile:  [ 0.0791622  21.18158364  8.38229157 15.77457717]
+
 
 
 
