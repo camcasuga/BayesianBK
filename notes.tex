@@ -953,6 +953,35 @@ log posterior at Median:  -736.4421375626798
 5th percentile:  [ 0.06347454  9.20272228  4.08004464 13.57408794]
 95th percentile:  [ 0.0791622  21.18158364  8.38229157 15.77457717]
 
+\section{MV5 500d}
+
+We train using all the training data, all 500 of them and 5 principal components. 
+
+Initial Guess for minimize:  [ 0.06  1.   18.9   7.2  16.36]
+log likelihood at initial guess: 29.48857243346057
+minimize estimates:  [ 0.07345575  1.13956376 22.36515645  9.42719533 16.23862259]
+log likelihod at minimize -451.4474377585897
+basinhopping estimates:  [ 0.07587967  1.17709709 15.60802581 10.68356322 17.27941878]
+log likelihood at basinhopping -452.4798359372386
+
+l_bounds = [0.001, 0.50, 0.5, 0.1, 5.0] 
+u_bounds = [0.2, 2.0, 40.0, 40.0, 30.0]
+
+$Q_{s0}^{2}$ (GeV²)= 0.072
+$\gamma$= 1.163
+$e_c$= 16.593
+$C^{2}$= 11.180
+$\sigma_0/2$ (mb)= 17.524
+Mean acceptance fraction: 0.335
+
+MAP estimates:  [ 0.07544704  1.17685836 15.92831193 10.64471042 17.28042844]
+log posterior at MAP:  -452.4759235097355
+Median Values:  [ 0.07204143  1.16227946 15.94885207 10.67643415 17.39648737]
+log posterior at Median:  -452.2247784694696
+16th percentile:  [ 0.05910932  1.11161607 11.67893365  8.80976153 16.15669387]
+84th percentile:  [ 0.08532826  1.20299972 21.63667611 13.00103905 19.15562481]
+5th percentile:  [ 0.04850321  1.0497583   9.62150486  7.66901105 15.42794229]
+95th percentile:  [ 0.09419154  1.23543689 26.05172588 16.62673423 20.57225175]
 
 
 
