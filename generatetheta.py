@@ -25,7 +25,7 @@ def get_lhcsamples(nparams, nsamples, param_limits = None ,seed_ = None, strengt
 	sp_params = qmc.scale(sp_sample, param_limits[0], param_limits[1])
 	return sp_params
 
-model_dir = '{}/{}/{}d'.format(model, type_lhs_name, str(n_paramvectors))
+model_dir = 'run2/{}/{}/{}d'.format(model, type_lhs_name, str(n_paramvectors))
 isExist = os.path.exists(model_dir)
 if not isExist: os.mkdir(model_dir)
 isExist2 = os.path.exists(model_dir + '/bks')
@@ -53,8 +53,10 @@ if model == 'mv':
 		i += 1
 
 if model == 'mve':
-	l_bounds = [.001, .5, 0.1, 5.] # Qs02 , ec, C2, sigma0/2
-	u_bounds = [0.2, 40., 40., 30.] # we are using MVe where the anomalous dimension gamma = 1
+	#l_bounds = [.001, .5, 0.1, 5.] # Qs02 , ec, C2, sigma0/2
+	#u_bounds = [0.2, 40., 40., 30.] # we are using MVe where the anomalous dimension gamma = 1
+	l_bounds = [0.05, 4.0, 3.2, 12.0] # range of peak from initial run
+	u_bounds = [0.1, 31.0, 14.0, 18.0]
 	n_params = 4
 	mylimits = np.array([l_bounds, u_bounds])
 	myparams = get_lhcsamples(n_params, 
@@ -75,10 +77,10 @@ if model == 'mve':
 		i += 1
 
 if model == 'mv5':
-	#l_bounds = [.001, .5, .5, 0.1, 10.] # Qs02 , ec, C2, sigma0/2, gamma
-	#u_bounds = [1., 2.0, 40., 40., 30.] # we are using MVe where the anomalous dimension gamma = 1
-	l_bounds = [.001, 0.5, 0.5, 0.1, 5.0] # Qs02 , ec, C2, sigma0/2, gamma
-	u_bounds = [0.2, 2.0, 40.0, 40.0, 30.0] # we are using MVe where the anomalous dimension gamma = 1
+	#l_bounds = [.001, 0.5, 0.5, 0.1, 5.0] # Qs02 , ec, C2, sigma0/2, gamma
+	#u_bounds = [0.2, 2.0, 40.0, 40.0, 30.0] # we are using MVe where the anomalous dimension gamma = 1
+	l_bounds = [0.025, 0.85, 4.3, 3.8, 12.0] # range of peak from initial run
+	u_bounds =  [0.125, 1.35, 37.0, 32.0, 24.0]
 	n_params = 5
 	mylimits = np.array([l_bounds, u_bounds])
 	myparams = get_lhcsamples(n_params, 
@@ -99,4 +101,4 @@ if model == 'mv5':
 		i += 1
 
 
-np.savetxt('submit_bk_jobs_{}_{}_{}d.sh'.format(model, type_lhs_name, n_paramvectors), lines, newline = '\n', fmt='%s')
+np.savetxt('submit_bk_jobs_{}_{}_{}d_run2.sh'.format(model, type_lhs_name, n_paramvectors), lines, newline = '\n', fmt='%s')

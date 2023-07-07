@@ -12,9 +12,9 @@ if type_lhs == 2:
 
 # read all files in a folder
 def read_file(which_param):
-    folder = '{}/{}/{}d/trains'.format(model,type_lhs_name, n_paramvectors)
+    folder = 'run2/{}/{}/{}d/trains'.format(model,type_lhs_name, n_paramvectors)
     file_name = folder + '/' + str(which_param) + '.txt'
     return np.loadtxt(file_name)
 
 train = [read_file(i) for i in range(n_paramvectors)]  
-np.savetxt('{}/{}/{}d/train.dat'.format(model, type_lhs_name, n_paramvectors), train, newline = '\n', fmt='%s')
+np.savetxt('run2/{}/{}/{}d/train.dat'.format(model, type_lhs_name, n_paramvectors), train, newline = '\n', fmt='%s')
