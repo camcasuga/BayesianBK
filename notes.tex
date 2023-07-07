@@ -953,6 +953,24 @@ log posterior at Median:  -736.4421375626798
 5th percentile:  [ 0.06347454  9.20272228  4.08004464 13.57408794]
 95th percentile:  [ 0.0791622  21.18158364  8.38229157 15.77457717]
 
+MLE initialization but use all 500 training points: 
+l_bounds_in = [0.055, 18.0, 7.0, 15.0]
+u_bounds_in = [0.07, 20.0, 9.0, 17.0]
+$Q_{s0}^{2}$ (GeV²)= 0.071
+$e_c$= 14.709
+$C^{2}$= 5.810
+$\sigma_0/2$ (mb)= 14.714
+Mean acceptance fraction: 0.256
+MAP estimates:  [ 0.06885919 14.88773569  5.44868163 14.68355545]
+log posterior at MAP:  -773.6908164763524
+Median Values:  [ 0.07073465 14.85738516  5.38523662 14.66998603]
+log posterior at Median:  -739.4917700159643
+16th percentile:  [ 0.06620075 10.53140977  4.65281333 13.98036537]
+84th percentile:  [ 0.07651262 18.86248493  7.29866718 15.38442958]
+5th percentile:  [ 0.06401181  8.79910545  4.16968912 13.54709125]
+95th percentile:  [ 0.08051251 20.82469179  8.31166476 15.72262435]
+
+
 \section{MV5 500d}
 
 We train using all the training data, all 500 of them and 5 principal components. 
@@ -967,12 +985,12 @@ log likelihood at basinhopping -452.4798359372386
 l_bounds = [0.001, 0.50, 0.5, 0.1, 5.0] 
 u_bounds = [0.2, 2.0, 40.0, 40.0, 30.0]
 
-$Q_{s0}^{2}$ (GeV²)= 0.072
-$\gamma$= 1.163
-$e_c$= 16.593
-$C^{2}$= 11.180
-$\sigma_0/2$ (mb)= 17.524
-Mean acceptance fraction: 0.335
+$Q_{s0}^{2}$ (GeV²)= 0.073
+$\gamma$= 1.188
+$e_c$= 16.246
+$C^{2}$= 12.013
+$\sigma_0/2$ (mb)= 17.599
+Mean acceptance fraction: 0.318
 
 MAP estimates:  [ 0.07544704  1.17685836 15.92831193 10.64471042 17.28042844]
 log posterior at MAP:  -452.4759235097355
@@ -984,5 +1002,25 @@ log posterior at Median:  -452.2247784694696
 95th percentile:  [ 0.09419154  1.23543689 26.05172588 16.62673423 20.57225175]
 
 
+\section{TO DO}
+1. Try 7 principal components
+2. Calculate model for MAP of 5 params
+3. Find x and Q2 dependence of the emulator vs the model. Take single valued x and q2 from data set.
+4. Crude active learning, make new LH plots.
+5. Learn how to save emulator.
+
+New ranges for the LH parameters:
+5 parameter case
+[0.025, 0.125]
+[0.85, 1.35]
+[4.3, 37.0]
+[3.8, 32.0]
+[12.0, 24.0]
+
+4 parameter case
+[0.05, 0.1]
+[4.0, 31.0]
+[3.2, 14.0]
+[12.0, 18.0]
 
 \end{document}
