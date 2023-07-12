@@ -81,6 +81,7 @@ if model == 'mv5':
 	#u_bounds = [0.2, 2.0, 40.0, 40.0, 30.0] # we are using MVe where the anomalous dimension gamma = 1
 	l_bounds = [0.025, 0.85, 4.3, 3.8, 12.0] # range of peak from initial run
 	u_bounds =  [0.125, 1.35, 37.0, 32.0, 24.0]
+	
 	n_params = 5
 	mylimits = np.array([l_bounds, u_bounds])
 	myparams = get_lhcsamples(n_params, 
